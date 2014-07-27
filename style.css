@@ -1,18 +1,10 @@
 #data tbody tr.selected { background-color: #B0BED8; }
 #data tbody tr { background-color: white; }
 .bottom-margin { margin-bottom: 0.75cm; }
-textarea { 
-	resize: none; 
-	vertical-align: top;
-}
 
 label {
 	float: left;
 	text-align: right;
 	margin-right: 5px;
 	width: 170px;
-}
-
-table {
-	display: inline-block;
 }

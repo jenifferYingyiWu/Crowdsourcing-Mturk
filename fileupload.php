@@ -35,20 +35,21 @@ echo "Stored in: " . rtrim($upload_dir, "/") . "<br>";
 echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 ?>
 
-<form action="createHIT.php" method="post" class="bottom-margin">
+<form action="createHIT.php" method="post" id="hit_form" class="bottom-margin">
 <label>Title:</label> <input type="text" name="title"><br>
-<label>Description:</label>	<textarea rows="3" cols="35" name="description"></textarea><br>
+<label>Description:</label>	<input type="text" name="description"></textarea><br>
 <label>Number of assignments:</label> <input type="text" name="numAssignments"><br>
 <label>Reward:</label> <input type="text" name="reward"><br>
 <label>Percentage failed to reject:</label> <input type="text" name="percentFailed"><br>
+<input type="hidden" name="tweetIDs" />
 <input type="submit" value="Submit">
 </form>
 
-Number of tweets selected: <span id="numSelected">0</span><br>
-Positive: <span id="numPositive">0</span><br>
-Negative: <span id="numNegative">0</span><br>
+Number of tweets selected: <span id="currSelected">0</span><br>
+Positive: <span id="currPositive">0</span><br>
+Negative: <span id="currNegative">0</span><br><br>
 <input id="selectAll" type="button" value="Select all">
-<input id="deselectAll" type="button" value="Deselect all">
+<input id="deselectAll" type="button" value="Deselect all"><br>
 
 <?php
 // read the data set row by row,
@@ -64,6 +65,10 @@ echo "<th align=\"left\">ID</th>";
 echo "<th align=\"left\">Sentiment</th>";
 echo "<th align=\"left\">Text</th>";
 echo "</tr></thead><tbody>";
+
+$numTweets = 0;
+$numPositive = 0;
+$numNegative = 0;
 
 $handle = fopen($fileDest, "r");
 while (($row = fgets($handle)) !== false) {
@@ -83,10 +88,25 @@ while (($row = fgets($handle)) !== false) {
 	echo "<tr><td>" . $currID . "</td>";
 	echo "<td>" . $currSentiment . "</td>";
 	echo "<td>" . $currText . "</td></tr>";
+
+	$numTweets = $numTweets + 1;
+	if ($currSentiment == 0)
+		$numNegative = $numNegative + 1;
+	else 
+		$numPositive = $numPositive + 1;
 }
+
 echo "</tbody></table>";
 fclose($handle);
-
 ?> 
+
+<script type="text/javascript">
+// transfer php variables to javascript so they can be used in chooseTweet.js
+// These are used for selectAll / deselectAll buttons.
+var numTweets = <?php echo json_encode($numTweets); ?>;
+var numPositive = <?php echo json_encode($numPositive); ?>;
+var numNegative = <?php echo json_encode($numNegative); ?>;
+</script>
+
 </body>
 </html>

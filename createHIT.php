@@ -1,4 +1,10 @@
 <?php
-	echo shell_exec("/opt/lampp/htdocs/mturk/createHIT.sh 2>&1");
-	echo 'Successfully created HIT';
+	$output = shell_exec("java GetParams"
+		. " " .  "\"" . $_POST['title'] . "\""
+		. " " .  "\"" . $_POST['description'] . "\""
+		. " " .  $_POST['numAssignments']
+		. " " .  $_POST['reward']
+		. " " .  $_POST['percentFailed']
+		. " " .  $_POST['tweetIDs']);
+	echo "<pre>$output<pre>";
 ?>
