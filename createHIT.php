@@ -2,6 +2,18 @@
 <html>
 <head>
 <title>HIT Created</title>
+<script type="text/javascript">
+	function loadXMLDoc() {
+		var xmlhttp = new XMLHttpRequest();
+		xmlhttp.onload = function() {
+			document.getElementById('crowdHistory').textContent = xmlhttp.responseText;
+		}
+		// add '?t='+Math.random() to prevent caching. Need it make is realize
+		// that we are loading a new (possibly updated) document each time.
+		xmlhttp.open('GET', 'crowdHistory.txt?t=' + Math.random(), true);
+		xmlhttp.send();
+	}
+</script>
 </head>
 <body>
 <?php
@@ -15,6 +27,7 @@
 		. " " . $_POST['tweetIDs']);
 	echo "<pre>$output<pre>";
 ?>
-<a href="crowdHistory.txt" target="_blank">See Crowd History</a>
+<input type="button" value="See Crowd History" onclick="loadXMLDoc()">
+<pre id="crowdHistory"></pre>
 </body>
 </html>

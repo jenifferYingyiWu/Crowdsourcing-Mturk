@@ -1,6 +1,7 @@
 #data tbody tr.selected { background-color: #B0BED8; }
 #data tbody tr { background-color: white; }
-.bottom-margin { margin-bottom: 0.75cm; }
+
+form.bottom-margin { margin-bottom: 0.75cm; }
 
 input[name='title'], input[name='description'] {
 	width: 300px;
