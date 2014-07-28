@@ -71,4 +71,29 @@ $(document).ready(function() {
 	$("#hit_form").submit(function() {
 		$('input[name=tweetIDs]').val(tweetIDs.join(","));
 	});
+
+	// In input fields:
+	// Make text disappear when focused if it's the placeholder
+	// Make text reappear when blurred if nothing is entered.
+	var placeholders = {
+		title: "Sentiment Analysis",
+		description: "Determine the sentiment of each tweet.",
+		numAssignments: "9",
+		reward: "0.05",
+		percentFailed: "0.8"
+	};
+
+	$("input").focus(function() {
+		if ($(this).val() == placeholders[$(this).attr('name')]) 
+			$(this).val('');
+	});
+	$("input").blur(function() {
+		if ($(this).val() == '')
+			$(this).val(placeholders[$(this).attr('name')]);
+	});
+
+	// on load, set the default values for all input fields except submit/hidden ones.
+	$("form input:not(input[type='submit']):not(input[type='hidden'])").each(function() {
+		$(this).val(placeholders[$(this).attr('name')]);
+	});
 });

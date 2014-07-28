@@ -36,11 +36,16 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 ?>
 
 <form action="createHIT.php" method="post" id="hit_form" class="bottom-margin">
-<label>Title:</label> <input type="text" name="title"><br>
-<label>Description:</label>	<input type="text" name="description"></textarea><br>
-<label>Number of assignments:</label> <input type="text" name="numAssignments"><br>
-<label>Reward:</label> <input type="text" name="reward"><br>
-<label>Percentage failed to reject:</label> <input type="text" name="percentFailed"><br>
+<label>Title:</label> 
+<input type="text" name="title"><br>
+<label>Description:</label>	
+<input type="text" name="description"><br>
+<label>Number of assignments:</label> 
+<input type="text" name="numAssignments"><br>
+<label>Reward:</label> 
+<input type="text" name="reward"><br>
+<label>Percentage failed to reject:</label> 
+<input type="text" name="percentFailed"><br>
 <input type="hidden" name="tweetIDs" /> <!-- value changed in js file upon submit -->
 <input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>" />
 <input type="submit" value="Submit">

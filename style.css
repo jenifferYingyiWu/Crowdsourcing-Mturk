@@ -2,6 +2,14 @@
 #data tbody tr { background-color: white; }
 .bottom-margin { margin-bottom: 0.75cm; }
 
+input[name='title'], input[name='description'] {
+	width: 300px;
+}
+
+input[name='numAssignments'], input[name='reward'], input[name='percentFailed'] {
+	width: 40px;
+}
+
 label {
 	float: left;
 	text-align: right;
