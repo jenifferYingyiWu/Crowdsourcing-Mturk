@@ -1,0 +1,54 @@
+import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.FileReader;
+
+class GetParams {
+	public static void main(String[] args) {
+		String title = args[0];
+		String description = args[1];
+		int numAssignments = Integer.parseInt(args[2]);
+		double reward = Double.parseDouble(args[3]);
+		double percentFailed = Double.parseDouble(args[4]);
+		String uploadedFile = args[5];
+
+		System.out.println("Title: " + title);
+		System.out.println("Description: " + description);
+		System.out.println("Number of assignments: " + numAssignments);
+		System.out.println("Reward: " + reward);
+		System.out.println("Percentage failed to reject user: " + percentFailed);
+		System.out.println("Uploaded file: " + uploadedFile);
+
+		// args[6] is a string containing all the tweet ids separated by commas
+		String [] tweetIDs_string = args[6].split(",");
+		int [] tweetIDs = new int[tweetIDs_string.length];
+		for (int id = 0; id < tweetIDs.length; id++)
+			tweetIDs[id] = Integer.parseInt(tweetIDs_string[id]);
+		Arrays.sort(tweetIDs);
+
+		// get the sentiment and text for the tweets we selected
+		// from the file we uploaded: tweetsX.details
+		String csvFile = "uploads/" + uploadedFile;
+		BufferedReader br = new BufferedReader(new FileReader(csvFile));
+
+		List<String> text = new ArrayList<String>();
+		List<int> sentiment = new ArrayList<int>();
+
+		int id = 1;
+		String row;
+		while ((row = br.readLine()) != null) {
+			String [] parts = row.split(",");	
+			sentiment.add(Integer.parseInt(parts[1]));
+
+			// get rid of first 2 elts (ID and sentiment). Only text remains.
+			String parts_onlyText = Arrays.copyOfRange(parts, 2, parts.length);
+			// put text back together incase it had commas and was split.
+			String currText = parts_onlyText[0];
+			for (int i = 1; i < parts_onlyText.length; i++)
+				currText += "," + parts_onlyText[i];
+			text.add(currText);
+
+			id++;
+		}
+		br.close();
+	}
+}

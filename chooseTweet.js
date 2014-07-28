@@ -6,8 +6,9 @@ $(document).ready(function() {
 	
 	// select/deselect a single row
 	$('#data tbody').on('click', 'tr', function() {
-		var ID = $(this).find('td:first-child').html();
+		var ID = parseInt($(this).find('td:first-child').html());
 		var sentiment = $(this).find('td:nth-child(2)').html();
+
 		if ($(this).hasClass('selected')) {
 			$(this).removeClass('selected');	
 			var index = tweetIDs.indexOf(ID);
@@ -15,7 +16,7 @@ $(document).ready(function() {
 			currSelected -= 1;
 
 			if (sentiment == 0)
-				currNegative -= 1;	
+				currNegative -= 1;
 			else
 				currPositive -= 1;
 		}

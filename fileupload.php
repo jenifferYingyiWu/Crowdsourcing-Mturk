@@ -41,7 +41,8 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 <label>Number of assignments:</label> <input type="text" name="numAssignments"><br>
 <label>Reward:</label> <input type="text" name="reward"><br>
 <label>Percentage failed to reject:</label> <input type="text" name="percentFailed"><br>
-<input type="hidden" name="tweetIDs" />
+<input type="hidden" name="tweetIDs" /> <!-- value changed in js file upon submit -->
+<input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>" />
 <input type="submit" value="Submit">
 </form>
 
@@ -102,10 +103,10 @@ fclose($handle);
 
 <script type="text/javascript">
 // transfer php variables to javascript so they can be used in chooseTweet.js
-// These are used for selectAll / deselectAll buttons.
-var numTweets = <?php echo json_encode($numTweets); ?>;
-var numPositive = <?php echo json_encode($numPositive); ?>;
-var numNegative = <?php echo json_encode($numNegative); ?>;
+// These are used for selectAll / deselectAll buttons
+var numTweets = <?php echo json_encode($numTweets); ?>;		// total number of tweets
+var numPositive = <?php echo json_encode($numPositive); ?>; // total number of pos tweets
+var numNegative = <?php echo json_encode($numNegative); ?>; // total number of neg tweets
 </script>
 
 </body>
