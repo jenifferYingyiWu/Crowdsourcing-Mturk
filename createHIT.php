@@ -17,14 +17,15 @@
 </head>
 <body>
 <?php
-	shell_exec('cd TurkHit; java -cp ".:external_jars/*" turkhit.TurkHIT
+	exec("cd TurkHit; java -cp \".:external_jars/*\" turkhit.TurkHIT"
 		. " " . "\"" . $_POST["title"] . "\""
 		. " " . "\"" . $_POST["description"] . "\""
 		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
 		. " " . $_POST["percentFailed"]
 		. " " .	$_POST["uploadedFile"]
-		. " " . $_POST["twetIDs"]');
+		. " " . $_POST["tweetIDs"] . " > /dev/null 2>/dev/null &");
+	// string added to end to make php process execute asynchronously in background
 
 	/* TESTING GetParams.java
 	// java [<option> ...] <class-name> [<argument> ...]
