@@ -76,11 +76,11 @@ $(document).ready(function() {
 	// Make text disappear when focused if it's the placeholder
 	// Make text reappear when blurred if nothing is entered.
 	var placeholders = {
-		title: "Sentiment Analysis",
-		description: "Determine the sentiment of each tweet.",
-		numAssignments: "9",
-		reward: "0.05",
-		percentFailed: "0.8"
+		title: "Sentiment Analysis of Tweets",
+		description: "Determine if each tweet is positive or negative.",
+		numAssignments: "1",
+		reward: "0.01",
+		percentFailed: "0.5"
 	};
 
 	$("input").focus(function() {

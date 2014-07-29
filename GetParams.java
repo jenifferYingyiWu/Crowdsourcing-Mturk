@@ -56,10 +56,10 @@ class GetParams {
 						currText += "," + parts_onlyText[i];
 					text.put(id, currText);
 
-					// if we haven't seen all selected tweets, look for the next one
+					// if we've seen all selected tweets, we're done.
 					if (id_iter == tweetIDs.length-1)
 						break;
-					else
+					else // else, look for the next one.
 						id_iter++;
 				}
 				id++;
