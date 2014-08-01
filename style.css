@@ -1,5 +1,7 @@
-#data tbody tr.selected { background-color: #B0BED8; }
+/* nothing --> selected --> gold --> nothing ... */
 #data tbody tr { background-color: white; }
+#data tbody tr.selected { background-color: #B0BED8; }
+#data tbody tr.gold { background-color: #FFD700; }
 
 form.bottom-margin { margin-bottom: 0.75cm; }
 
@@ -7,7 +9,8 @@ input[name='title'], input[name='description'] {
 	width: 300px;
 }
 
-input[name='numAssignments'], input[name='reward'], input[name='percentFailed'] {
+input[name='numAssignments'], input[name='reward'], input[name='percentFailed'],
+input[name='minBatchSize'], input[name='HITduration'] {
 	width: 40px;
 }
 

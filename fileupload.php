@@ -46,6 +46,10 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 <input type="text" name="reward"><br>
 <label>Percentage failed to reject:</label> 
 <input type="text" name="percentFailed"><br>
+<label>Minimum batch size:</label>
+<input type="text" name="minBatchSize"><br>
+<label>Duration of HIT (sec):</label>
+<input type="text" name="HITduration"><br>
 <input type="hidden" name="tweetIDs" /> <!-- value changed in js file upon submit -->
 <input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>" />
 <input type="submit" value="Submit">

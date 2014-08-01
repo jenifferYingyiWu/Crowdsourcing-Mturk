@@ -80,7 +80,9 @@ $(document).ready(function() {
 		description: "Determine if each tweet is positive or negative.",
 		numAssignments: "1",
 		reward: "0.01",
-		percentFailed: "0.5"
+		percentFailed: "0.5",
+		minBatchSize: "10",
+		HITduration: "120"
 	};
 
 	$("input").focus(function() {

@@ -24,7 +24,10 @@
 		. " " . $_POST["reward"]
 		. " " . $_POST["percentFailed"]
 		. " " .	$_POST["uploadedFile"]
-		. " " . $_POST["tweetIDs"] . " > /dev/null 2>/dev/null &");
+		. " " . $_POST["tweetIDs"] 
+		. " " . $_POST["minBatchSize"] 
+		. " " . $_POST["HITduration"] 
+		. " > /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 
 	/* TESTING GetParams.java
