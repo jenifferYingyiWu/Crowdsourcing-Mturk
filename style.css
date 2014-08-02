@@ -1,4 +1,3 @@
-/* nothing --> selected --> gold --> nothing ... */
 #data tbody tr { background-color: white; }
 #data tbody tr.selected { background-color: #B0BED8; }
 #data tbody tr.gold { background-color: #FFD700; }
