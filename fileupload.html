@@ -35,27 +35,11 @@
 <body>
 <form action="fileupload.php" method="post" enctype="multipart/form-data">
 <h3>Specify Input File</h3>
-<p>Choose a CSV file to upload where each row is an instance
-and each column is an attribute or label for the instances.</p>
+<ul>
+<li>The file must be in CSV format.</li>
+<li>The first line must contain the names of the columns.</li>
+</ul>
 <input type="file" name="myFile"><br>
-
-<h3>Specify Column of Labels</h3>
-<input type="checkbox" name="labels" value="isLabeled">The data is labeled<br>
-<div class="label">
-<label >Name of Labels:</label> 
-<input type="text" name="labelName"><br>
-<label >Column of Labels:</label> 
-<input type="text" name="labelCol" style="width:35px;"><br>
-</div>
-
-<h3>Specify Columns of Attributes</h3>
-<label>Name of attribute:</label>
-<input type="text" name="attrName"><br>
-<label>Column of attribute:</label>
-<input type="text" name="attrCol" style="width:35px;"><br>
-<input type="button" id="addAttribute" value="Add Attribute"><br>
-<div id="attributesSoFar"></div><br>
-
 <input type="submit" value="Upload">
 </form>
 </body>

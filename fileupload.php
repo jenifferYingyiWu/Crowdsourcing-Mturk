@@ -50,72 +50,52 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 <input type="text" name="minBatchSize"><br>
 <label>Duration of HIT (sec):</label>
 <input type="text" name="HITduration"><br>
-<input type="hidden" name="tweetIDs" /> <!-- value changed in js file upon submit -->
-<input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>" />
+<input type="hidden" name="keys_of_selected"> <!-- value changed in js file upon submit -->
+<input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>">
 <input type="submit" value="Submit">
 </form>
 
-Number of tweets selected: <span id="currSelected">0</span><br>
-Positive: <span id="currPositive">0</span><br>
-Negative: <span id="currNegative">0</span><br><br>
+Number of records selected: <span id="numSelected">0</span><br>
 <input id="selectAll" type="button" value="Select all">
 <input id="deselectAll" type="button" value="Deselect all"><br>
 
 <?php
 // read the data set row by row,
 // where each row takes the form: ID,sentiment,text
+// and output the dataset in a table
 $ID = array();
 $sentiment = array();
 $text = array();
-
-// and output the dataset in a table
-echo "<table id=\"data\" border=\"1\">";
-echo "<thead><tr>";
-echo "<th align=\"left\">ID</th>";
-echo "<th align=\"left\">Sentiment</th>";
-echo "<th align=\"left\">Text</th>";
-echo "</tr></thead><tbody>";
 
 $numTweets = 0;
 $numPositive = 0;
 $numNegative = 0;
 
 $handle = fopen($fileDest, "r");
-while (($row = fgets($handle)) !== false) {
-	$parts = explode(",", $row);	
+$firstLine = fgetcsv($handle);
+$numCols = count($firstLine);
 
-	$currID = $parts[0];
-	array_push($ID, $currID);
-	$currSentiment = $parts[1];
-	array_push($sentiment, $currSentiment);
+echo "<table id=\"data\" border=\"1\">";
+echo "<thead><tr>";
+for ($i = 0; $i < $numCols; $i++)
+	echo "<th align=\"left\">" . $firstLine[$i] . "</th>";
+echo "</tr></thead><tbody>";
 
-	// get rid of first 2 elts (ID and sentiment). Only text remains.
-	$parts_onlyText = array_slice($parts, 2); 
-	// put text back together incase it had commas and was exploded.
-	$currText = implode(",", $parts_onlyText);
-	array_push($text, $currText);
-
-	echo "<tr><td>" . $currID . "</td>";
-	echo "<td>" . $currSentiment . "</td>";
-	echo "<td>" . $currText . "</td></tr>";
-
-	$numTweets = $numTweets + 1;
-	if ($currSentiment == 0)
-		$numNegative = $numNegative + 1;
-	else 
-		$numPositive = $numPositive + 1;
+$numRecords = 0;
+while ($line = fgetcsv($handle)) {
+	echo "<tr>";
+	for ($i = 0; $i < $numCols; $i++)
+		echo "<td>" . $line[$i] . "</td>";
+	echo "</tr>";
+	$numRecords++;
 }
-
 echo "</tbody></table>";
 fclose($handle);
 ?> 
 
 <script type="text/javascript">
 // transfer php variables to javascript so they can be used in chooseTweet.js
-// These are used for selectAll / deselectAll buttons
-var numTweets = <?php echo json_encode($numTweets); ?>;		// total number of tweets
-var numPositive = <?php echo json_encode($numPositive); ?>; // total number of pos tweets
-var numNegative = <?php echo json_encode($numNegative); ?>; // total number of neg tweets
+var numRecords = <?php echo json_encode($numRecords); ?>; // total number of records
 </script>
 
 </body>

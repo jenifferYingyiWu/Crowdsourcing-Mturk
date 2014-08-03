@@ -24,7 +24,7 @@
 		. " " . $_POST["reward"]
 		. " " . $_POST["percentFailed"]
 		. " " .	$_POST["uploadedFile"]
-		. " " . $_POST["tweetIDs"] 
+		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["minBatchSize"] 
 		. " " . $_POST["HITduration"] 
 		. " > /dev/null 2>/dev/null &");
