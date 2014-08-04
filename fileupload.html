@@ -2,35 +2,6 @@
 <html>
 <head>
 <title>Upload File</title>
-<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-<script type="text/javascript">
-	$(document).ready(function() {
-		$(".label").hide();
-
-		$("input[type='checkbox']").change(function() {
-			if (this.checked)
-				$(".label").show()
-			else {
-				$(".label").hide();
-				$("input[name='labelCol']").val('');
-				$("input[name='labelName']").val('');
-			}
-		});
-		
-		$("#addAttribute").click(function() {
-			if ($("input[name='attrName']").val() == '' || 
-				$("input[name='attrCol']").val() == '') {
-				alert('Attribute name or column not specified.');
-				return;
-			}
-			$("#attributesSoFar").append(
-				$("input[name='attrName']").val() + " " + 
-				$("input[name='attrCol']").val() + "<br>");
-			$("input[name='attrName']").val('');
-			$("input[name='attrCol']").val('');
-		});
-	});
-</script>
 </head>
 <body>
 <form action="fileupload.php" method="post" enctype="multipart/form-data">
@@ -38,8 +9,15 @@
 <ul>
 <li>The file must be in CSV format.</li>
 <li>The first line must contain the names of the columns.</li>
+<li>Image links must be:
+	<ul>
+		<li>relative, if stored on this web server</li>
+		<li>absolute, if stored on an external web server</li>
+	</ul>
 </ul>
 <input type="file" name="myFile"><br>
+<label>Comma separated list of columns with image links (1-based indexing): </label>
+<input type="text" name="imageCols"><br>
 <input type="submit" value="Upload">
 </form>
 </body>

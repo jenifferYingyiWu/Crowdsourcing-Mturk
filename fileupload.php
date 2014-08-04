@@ -81,11 +81,26 @@ for ($i = 0; $i < $numCols; $i++)
 	echo "<th align=\"left\">" . $firstLine[$i] . "</th>";
 echo "</tr></thead><tbody>";
 
+if (isset($_POST['imageCols'])) {
+	$imageCols = array_map('intval', explode(",", $_POST['imageCols']));
+	for ($i = 0; $i < count($imageCols); $i++)
+		$imageCols[$i]--;
+}
+else // no column has image links
+	$imageCols = array(-1);
+
 $numRecords = 0;
 while ($line = fgetcsv($handle)) {
 	echo "<tr>";
-	for ($i = 0; $i < $numCols; $i++)
-		echo "<td>" . $line[$i] . "</td>";
+	for ($i = 0; $i < $numCols; $i++) {
+		$line[$i] = trim($line[$i]);
+		echo "<td>";
+		if (in_array($i, $imageCols))
+			echo "<image src=\"" . $line[$i] . "\">";	
+		else 
+			echo $line[$i];	
+		echo "</td>";
+	}
 	echo "</tr>";
 	$numRecords++;
 }
