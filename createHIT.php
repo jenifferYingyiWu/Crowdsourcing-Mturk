@@ -3,10 +3,27 @@
 <head>
 <title>HIT Created</title>
 <script type="text/javascript">
+	var numSelected = <?php echo json_encode(count(explode(",", $_POST["keys_of_selected"]))); ?>;
+
 	function loadXMLDoc() {
 		var xmlhttp = new XMLHttpRequest();
 		xmlhttp.onload = function() {
-			document.getElementById('crowdHistory').textContent = xmlhttp.responseText;
+			var responseText_split = (xmlhttp.responseText).split("\n");
+			var responseText = "";
+			for (var i = 0; i < 3*numSelected + (numSelected-1); i++)
+				responseText += ("\n" + responseText_split[i]);
+
+			responseText += "\n";
+
+			var offset;
+			if (responseText_split[responseText_split.length-2].substring(0,7) == "Finish!")
+				offset = 4;
+			else 
+				offset = 2;
+
+			for (var i = responseText_split.length-numSelected-offset; i < responseText_split.length; i++)
+				responseText += ("\n" + responseText_split[i]);
+			document.getElementById('crowdHistory').textContent = responseText;
 		}
 		// add '?t='+Math.random() to prevent caching. Makes webserver realize
 		// that we are loading a new (possibly updated) document each time.
