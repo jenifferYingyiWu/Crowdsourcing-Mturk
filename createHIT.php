@@ -22,11 +22,12 @@
 		. " " . "\"" . $_POST["description"] . "\""
 		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
-		. " " . $_POST["percentFailed"]
+		. " " . $_POST["rejectionThreshold"]
 		. " " .	$_POST["uploadedFile"]
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["minBatchSize"] 
 		. " " . $_POST["HITduration"] 
+		. " " . $_POST["labelsAvailable"] 
 		. " > /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 

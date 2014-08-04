@@ -8,7 +8,7 @@ input[name='title'], input[name='description'] {
 	width: 300px;
 }
 
-input[name='numAssignments'], input[name='reward'], input[name='percentFailed'],
+input[name='numAssignments'], input[name='reward'], input[name='rejectionThreshold'],
 input[name='minBatchSize'], input[name='HITduration'] {
 	width: 40px;
 }

@@ -44,12 +44,20 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 <input type="text" name="numAssignments"><br>
 <label>Reward:</label> 
 <input type="text" name="reward"><br>
-<label>Percentage failed to reject:</label> 
-<input type="text" name="percentFailed"><br>
 <label>Minimum batch size:</label>
 <input type="text" name="minBatchSize"><br>
 <label>Duration of HIT (sec):</label>
-<input type="text" name="HITduration"><br>
+<input type="text" name="HITduration"><br><br>
+
+To verify a user is submitting good data:<br>
+<input type="radio" name="labelsAvailable" value="labels">Use a small subset 
+of the data as gold data. Labels are available.<br>
+<input type="radio" name="labelsAvailable" value="noLabels">Use all data 
+with the crowd's majority vote as labels. Labels are not available.<br><br>
+
+Reject a user if its classification error on the above selected data is at least: 
+<input type="text" name="rejectionThreshold"><br><br>
+
 <input type="hidden" name="keys_of_selected"> <!-- value changed in js file upon submit -->
 <input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>">
 <input type="submit" value="Submit">
