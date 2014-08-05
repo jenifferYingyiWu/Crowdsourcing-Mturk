@@ -40,12 +40,14 @@
 		. " " . "\"" . $_POST["description"] . "\""
 		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
-		. " " . $_POST["rejectionThreshold"]
-		. " " .	$_POST["uploadedFile"]
-		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["minBatchSize"] 
 		. " " . $_POST["HITduration"] 
-		. " " . $_POST["labelsAvailable"] 
+		. " " . $_POST["usingGold"] 
+		. " " . $_POST["rejectionThreshold"]
+		. " " . $_POST["percentOfGold"] 
+		. " " . $_POST["keys_of_selected"] 
+		. " " . $_POST["keys_of_gold"] 
+		. " " .	$_POST["uploadedFile"]
 		. " > /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 	*/
@@ -57,12 +59,17 @@
 		. " " . "\"" . $_POST["description"] . "\""
 		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
-		. " " . $_POST["rejectionThreshold"]
-		. " " .	$_POST["uploadedFile"]
-		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["minBatchSize"] 
 		. " " . $_POST["HITduration"] 
-		. " " . $_POST["labelsAvailable"] . " 2>&1");
+		. " " . $_POST["contentCol"] 
+		. " " . $_POST["usingGold"] 
+		. " " . $_POST["rejectionThreshold"]
+		. " " . $_POST["percentOfGold"] 
+		. " " . $_POST["labelCol"] 
+		. " " . $_POST["keys_of_selected"] 
+		. " " . $_POST["keys_of_gold"] 
+		. " " .	$_POST["uploadedFile"]
+		. " 2>&1");
 		echo "<pre>$output<pre>";
 	
 ?>

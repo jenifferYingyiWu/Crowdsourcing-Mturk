@@ -1,4 +1,4 @@
-#data tbody tr { background-color: white; }
+#data tbody tr.unselected { background-color: white; }
 #data tbody tr.selected { background-color: #B0BED8; }
 #data tbody tr.gold { background-color: #FFD700; }
 
@@ -9,7 +9,8 @@ input[name='title'], input[name='description'] {
 }
 
 input[name='numAssignments'], input[name='reward'], input[name='rejectionThreshold'],
-input[name='minBatchSize'], input[name='HITduration'] {
+input[name='minBatchSize'], input[name='HITduration'], input[name='percentOfGold'],
+input[name='labelCol'], input[name='contentCol'] {
 	width: 40px;
 }
 
@@ -17,5 +18,15 @@ label {
 	float: left;
 	text-align: right;
 	margin-right: 5px;
-	width: 170px;
+	width: 250px;
+}
+
+/* no text highlighting in table */
+#data {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: moz-none;
+    -ms-user-select: none;
+    user-select: none;
 }

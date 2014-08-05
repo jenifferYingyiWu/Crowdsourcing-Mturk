@@ -32,8 +32,10 @@ if (!$success) {
 
 chmod($fileDest, 0644);
 echo "Stored in: " . rtrim($upload_dir, "/") . "<br>";
-echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
+echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br>";
 ?>
+
+<h3>Specify HIT Parameters</h3>
 
 <form action="createHIT.php" method="post" id="hit_form" class="bottom-margin">
 <label>Title:</label> 
@@ -47,23 +49,41 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br><br>";
 <label>Minimum batch size:</label>
 <input type="text" name="minBatchSize"><br>
 <label>Duration of HIT (sec):</label>
-<input type="text" name="HITduration"><br><br>
+<input type="text" name="HITduration"><br>
+<label>Column of Content (1-based indexing):</label>
+<input type="text" name="contentCol"><br><br>
 
 To verify a user is submitting good data:<br>
-<input type="radio" name="labelsAvailable" value="labels">Use a small subset 
-of the data as gold data. Labels are available.<br>
-<input type="radio" name="labelsAvailable" value="noLabels">Use all data 
-with the crowd's majority vote as labels. Labels are not available.<br><br>
+<input type="radio" name="usingGold" value="false" checked>Use all selected records 
+with the crowd's majority vote as labels.<br>
+<input type="radio" name="usingGold" value="true">Use a subset 
+of the selected records as gold data. Labels must available.<br>
 
 Reject a user if its classification error on the above selected data is at least: 
-<input type="text" name="rejectionThreshold"><br><br>
+<input type="text" name="rejectionThreshold"><br>
 
-<input type="hidden" name="keys_of_selected"> <!-- value changed in js file upon submit -->
+<div class="usingGold">
+Percentage of gold data randomly chosen to attach to each group:
+<input type="text" name="percentOfGold"><br>
+Column of labels (1-based indexing):
+<input type="text" name="labelCol"><br>
+</div>
+
+<!-- values changed in js file upon submit -->
+<input type="hidden" name="keys_of_selected"> 
+<input type="hidden" name="keys_of_gold">
+
 <input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>">
 <input type="submit" value="Submit">
 </form>
 
+Clicking a table row cycles through 
+<span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span><br>
+
 Number of records selected: <span id="numSelected">0</span><br>
+<div class="usingGold">
+Number of records used as gold data: <span id="numGold">0</span><br>
+</div>
 <input id="selectAll" type="button" value="Select all">
 <input id="deselectAll" type="button" value="Deselect all"><br>
 
@@ -99,7 +119,7 @@ else // no column has image links
 
 $numRecords = 0;
 while ($line = fgetcsv($handle)) {
-	echo "<tr>";
+	echo "<tr class='unselected'>";
 	for ($i = 0; $i < $numCols; $i++) {
 		$line[$i] = trim($line[$i]);
 		echo "<td>";
