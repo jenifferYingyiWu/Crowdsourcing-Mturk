@@ -38,36 +38,36 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br>";
 <h3>Specify HIT Parameters</h3>
 
 <form action="createHIT.php" method="post" id="hit_form" class="bottom-margin">
-<label>Title:</label> 
+<label class="topLabel">Title:</label> 
 <input type="text" name="title"><br>
-<label>Description:</label>	
+<label class="topLabel">Description:</label>	
 <input type="text" name="description"><br>
-<label>Number of assignments:</label> 
-<input type="text" name="numAssignments"><br>
-<label>Reward:</label> 
+<label class="topLabel">Labels Per Record:</label> 
+<input type="text" name="labelsPerRecord"><br>
+<label class="topLabel">Reward ($):</label> 
 <input type="text" name="reward"><br>
-<label>Minimum batch size:</label>
-<input type="text" name="minBatchSize"><br>
-<label>Duration of HIT (sec):</label>
-<input type="text" name="HITduration"><br>
-<label>Column of Content (1-based indexing):</label>
-<input type="text" name="contentCol"><br><br>
+<label class="topLabel">Duration (seconds):</label>
+<input type="text" name="HITduration"><br><br>
 
 To verify a user is submitting good data:<br>
 <input type="radio" name="usingGold" value="false" checked>Use all selected records 
 with the crowd's majority vote as labels.<br>
 <input type="radio" name="usingGold" value="true">Use a subset 
-of the selected records as gold data. Labels must available.<br>
+of the selected records as gold data. Labels must available.<br><br>
 
-Reject a user if its classification error on the above selected data is at least: 
+<label class="botLabel">Reject if classification accuracy on above 
+selected data is less than:</label>
 <input type="text" name="rejectionThreshold"><br>
 
 <div class="usingGold">
-Percentage of gold data randomly chosen to attach to each group:
+<label class="botLabel">Proportion of gold data randomly chosen to attach to each group:</label>
 <input type="text" name="percentOfGold"><br>
-Column of labels (1-based indexing):
+<label class="botLabel">Name of column with the labels:</label>
 <input type="text" name="labelCol"><br>
 </div>
+
+<label class="botLabel">Comma separated list of possible values for the labels:</label> 
+<input type="text" name="labelValues"><br><br>
 
 <!-- values changed in js file upon submit -->
 <input type="hidden" name="keys_of_selected"> 
@@ -77,15 +77,14 @@ Column of labels (1-based indexing):
 <input type="submit" value="Submit">
 </form>
 
-Clicking a table row cycles through 
-<span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span><br>
-
 Number of records selected: <span id="numSelected">0</span><br>
 <div class="usingGold">
 Number of records used as gold data: <span id="numGold">0</span><br>
 </div>
 <input id="selectAll" type="button" value="Select all">
 <input id="deselectAll" type="button" value="Deselect all"><br>
+Clicking a table row cycles through 
+<span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span><br>
 
 <?php
 // read the data set row by row,
@@ -100,30 +99,28 @@ $numPositive = 0;
 $numNegative = 0;
 
 $handle = fopen($fileDest, "r");
-$firstLine = fgetcsv($handle);
-$numCols = count($firstLine);
+$columnNames = fgetcsv($handle); // get first line
+$numCols = count($columnNames);
+$columnNames = array_map('trim', $columnNames);
 
 echo "<table id=\"data\" border=\"1\">";
 echo "<thead><tr>";
 for ($i = 0; $i < $numCols; $i++)
-	echo "<th align=\"left\">" . $firstLine[$i] . "</th>";
+	echo "<th align=\"left\">" . $columnNames[$i] . "</th>";
 echo "</tr></thead><tbody>";
 
-if (isset($_POST['imageCols'])) {
-	$imageCols = array_map('intval', explode(",", $_POST['imageCols']));
-	for ($i = 0; $i < count($imageCols); $i++)
-		$imageCols[$i]--;
-}
-else // no column has image links
-	$imageCols = array(-1);
+if (isset($_POST['imageCols']))
+	$imageCols = explode(",", $_POST['imageCols']);
+else
+	$imageCols = array("-1");
 
 $numRecords = 0;
 while ($line = fgetcsv($handle)) {
+	$line = array_map('trim', $line);
 	echo "<tr class='unselected'>";
 	for ($i = 0; $i < $numCols; $i++) {
-		$line[$i] = trim($line[$i]);
 		echo "<td>";
-		if (in_array($i, $imageCols))
+		if (in_array($columnNames[$i], $imageCols))
 			echo "<image src=\"" . $line[$i] . "\">";	
 		else 
 			echo $line[$i];	

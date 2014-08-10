@@ -2,23 +2,29 @@
 #data tbody tr.selected { background-color: #B0BED8; }
 #data tbody tr.gold { background-color: #FFD700; }
 
-form.bottom-margin { margin-bottom: 0.75cm; }
+.bottom-margin { margin-bottom: 0.5cm; }
 
-input[name='title'], input[name='description'] {
+input[name='title'], input[name='description'], input[name='categories'] {
 	width: 300px;
 }
 
-input[name='numAssignments'], input[name='reward'], input[name='rejectionThreshold'],
-input[name='minBatchSize'], input[name='HITduration'], input[name='percentOfGold'],
-input[name='labelCol'], input[name='contentCol'] {
+input[name='labelsPerRecord'], input[name='reward'], input[name='rejectionThreshold'],
+input[name='minBatchSize'], input[name='HITduration'], input[name='percentOfGold'] {
 	width: 40px;
 }
 
-label {
+label.topLabel {
 	float: left;
 	text-align: right;
 	margin-right: 5px;
-	width: 250px;
+	width: 140px;
+}
+
+label.botLabel {
+	float: left;
+	text-align: right;
+	margin-right: 5px;
+	width: 430px;
 }
 
 /* no text highlighting in table */
