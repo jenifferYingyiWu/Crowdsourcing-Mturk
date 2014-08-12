@@ -2,6 +2,9 @@
 <html>
 <head>
 <title>Upload File</title>
+<style type="text/css">
+	.italic { font-style: italic; }
+</style>
 </head>
 <body>
 <form action="fileupload.php" method="post" enctype="multipart/form-data">
@@ -25,7 +28,7 @@
 <li>If ${column_name} is found within tags, it will be replaced by the contents of the 
 	specified column in the actual HIT.</li>
 <li>The answer must be selected with radio buttons, and the 
-	<span class="italic">SelectionIdentifier</span> tags contain the possible values for the labels.</li>
+	<span class="italic">SelectionIdentifier</span> tags must contain the possible values for the labels.</li>
 </ul>
 <input type="file" name="questionFile"><br><br>
 
