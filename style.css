@@ -36,3 +36,6 @@ label.botLabel {
     -ms-user-select: none;
     user-select: none;
 }
+
+.italic { font-style: italic; }
+

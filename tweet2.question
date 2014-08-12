@@ -2,7 +2,7 @@
   <Question>
     <QuestionIdentifier>1</QuestionIdentifier>
     <QuestionContent>
-      <Text>OH YAY. I have 70 people following me! Thanks everybody~!   In other news, I'm replaying through Ocarina of Time.</Text>
+		<Text>${Text}</Text>
     </QuestionContent>
     <AnswerSpecification>
       <SelectionAnswer>

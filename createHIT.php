@@ -36,19 +36,7 @@
 <?php
 	/*
 	exec("cd TurkHit; java -cp \".:external_jars/*\" turkhit.TurkHIT"
-		. " " . "\"" . $_POST["title"] . "\""
-		. " " . "\"" . $_POST["description"] . "\""
-		. " " . $_POST["labelsPerRecord"] // numAssignments
-		. " " . $_POST["reward"]
-		. " " . $_POST["minBatchSize"] 
-		. " " . $_POST["HITduration"] 
-		. " " . $_POST["usingGold"] 
-		. " " . $_POST["rejectionThreshold"]
-		. " " . $_POST["percentOfGold"] 
-		. " " . $_POST["keys_of_selected"] 
-		. " " . $_POST["keys_of_gold"] 
-		. " " .	$_POST["uploadedFile"]
-		. " > /dev/null 2>/dev/null &");
+			. " > /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 	*/
 
@@ -64,10 +52,10 @@
 		. " " . $_POST["rejectionThreshold"]
 		. " " . $_POST["percentOfGold"] 
 		. " " . $_POST["labelCol"] 
-		. " " . $_POST["labelValues"] 
+		. " " . $_POST["dataFile"]
+		. " " .	$_POST["questionFile"]
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
-		. " " .	$_POST["uploadedFile"]
 		. " 2>&1");
 		echo "<pre>$output<pre>";
 ?>

@@ -9,30 +9,42 @@
 </head>
 <body>
 <?php
-// if there was an error opening the file
-if ($_FILES["myFile"]["error"] > 0) {
-	echo "Error: " . $_FILES["myFile"]["error"] . "<br />";
+// if there was an error opening the files
+if ($_FILES["dataFile"]["error"] > 0) {
+	echo "Error: " . $_FILES["dataFile"]["error"] . "<br />";
 	exit;
 }
-
-// else, print file details
-echo "Upload: " . $_FILES["myFile"]["name"] . "<br>";
-//echo "Type: " . $_FILES["myFile"]["type"] . "<br>";
-//echo "Temp file: " . $_FILES["myFile"]["tmp_name"]. "<br>";
+if ($_FILES["questionFile"]["error"] > 0) {
+	echo "Error: " . $_FILES["dataFile"]["error"] . "<br />";
+	exit;
+}
 
 // move the file to its permanent location
 $upload_dir = "/opt/lampp/htdocs/mturk/uploads/";
-$fileDest = $upload_dir . $_FILES["myFile"]["name"];
+$dataFileDest = $upload_dir . $_FILES["dataFile"]["name"];
+$questionFileDest = $upload_dir . $_FILES["questionFile"]["name"];
 
-$success = move_uploaded_file($_FILES["myFile"]["tmp_name"], $fileDest);
+$success = move_uploaded_file($_FILES["dataFile"]["tmp_name"], $dataFileDest);
 if (!$success) {
-	echo "<p>Unable to save file.</p>";
+	echo "<p>Unable to save data file.</p>";
 	exit;
 }
+chmod($dataFileDest, 0644);
 
-chmod($fileDest, 0644);
-echo "Stored in: " . rtrim($upload_dir, "/") . "<br>";
-echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br>";
+$success = move_uploaded_file($_FILES["questionFile"]["tmp_name"], $questionFileDest);
+if (!$success) {
+	echo "<p>Unable to save question file.</p>";
+	exit;
+}
+chmod($questionFileDest, 0644);
+
+// print file details
+echo "<b>Data File</b><br>";
+echo "Location: " . $dataFileDest . "<br>";
+echo "Size: " . round($_FILES["dataFile"]["size"] / 1024,4) . " Kb<br>";
+echo "<b>Question File</b><br>";
+echo "Location: " . $questionFileDest . "<br>";
+echo "Size: " . round($_FILES["questionFile"]["size"] / 1024,4) . " Kb<br>";
 ?>
 
 <h3>Specify HIT Parameters</h3>
@@ -49,7 +61,7 @@ echo "Size: " . round($_FILES["myFile"]["size"] / 1024,4) . " Kb<br>";
 <label class="topLabel">Duration (seconds):</label>
 <input type="text" name="HITduration"><br><br>
 
-To verify a user is submitting good data:<br>
+<b>To verify a user is submitting good data:</b><br>
 <input type="radio" name="usingGold" value="false" checked>Use all selected records 
 with the crowd's majority vote as labels.<br>
 <input type="radio" name="usingGold" value="true">Use a subset 
@@ -66,14 +78,13 @@ selected data is less than:</label>
 <input type="text" name="labelCol"><br>
 </div>
 
-<label class="botLabel">Comma separated list of possible values for the labels:</label> 
-<input type="text" name="labelValues"><br><br>
+<input type="hidden" name="dataFile" value="<?php echo $_FILES["dataFile"]["name"]; ?>">
+<input type="hidden" name="questionFile" value="<?php echo $_FILES["questionFile"]["name"]; ?>">
 
 <!-- values changed in js file upon submit -->
 <input type="hidden" name="keys_of_selected"> 
 <input type="hidden" name="keys_of_gold">
 
-<input type="hidden" name="uploadedFile" value="<?php echo $_FILES["myFile"]["name"]; ?>">
 <input type="submit" value="Submit">
 </form>
 
@@ -98,7 +109,7 @@ $numTweets = 0;
 $numPositive = 0;
 $numNegative = 0;
 
-$handle = fopen($fileDest, "r");
+$handle = fopen($dataFileDest, "r");
 $columnNames = fgetcsv($handle); // get first line
 $numCols = count($columnNames);
 $columnNames = array_map('trim', $columnNames);

@@ -5,7 +5,7 @@
 </head>
 <body>
 <form action="fileupload.php" method="post" enctype="multipart/form-data">
-<h3>Specify Input File</h3>
+<h3>Specify Data File</h3>
 <ul>
 <li>The file must be in CSV format.</li>
 <li>The first line must contain the names of the columns.</li>
@@ -15,9 +15,20 @@
 		<li>absolute, if the images are stored on an external web server.</li>
 	</ul>
 </ul>
-<input type="file" name="myFile"><br>
-<label>Comma separated list of columns names with image links: </label>
+<input type="file" name="dataFile"><br>
+<label>Comma separated list of columns names with image links:</label>
 <input type="text" name="imageCols"><br>
+
+<h3>Specify Question Format File</h3>
+<ul>
+<li>It must be an XML file conforming to the <span class="italic">QuestionForm</span> schema.</li>
+<li>If ${column_name} is found within tags, it will be replaced by the contents of the 
+	specified column in the actual HIT.</li>
+<li>The answer must be selected with radio buttons, and the 
+	<span class="italic">SelectionIdentifier</span> tags contain the possible values for the labels.</li>
+</ul>
+<input type="file" name="questionFile"><br><br>
+
 <input type="submit" value="Upload">
 </form>
 </body>

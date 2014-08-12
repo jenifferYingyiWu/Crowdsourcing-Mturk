@@ -19,6 +19,8 @@ class GetParams {
 			percentOfGold = Double.parseDouble(args[7]);	
 			labelCol = args[8];
 		}
+		String dataFile = args[9];
+		String questionFile = args[10];
 
 		System.out.println("Title: " + title);
 		System.out.println("Description: " + description);
@@ -35,14 +37,10 @@ class GetParams {
 			System.out.println("Percent of gold chosen: Not Applicable");
 			System.out.println("Name of column of labels: Not Applicable");
 		}
+		System.out.println("Data file: " + dataFile);
+		System.out.println("Question file: " + questionFile);
 
-		String [] labelValues = args[9].split(",");
-		System.out.print("Possible label values: ");
-		for (String labelVal: labelValues) 
-			System.out.print(labelVal + " ");
-		System.out.println();
-
-		String [] keys_of_selected_string = args[10].split(",");
+		String [] keys_of_selected_string = args[11].split(",");
 		int [] keys_of_selected = new int[keys_of_selected_string.length];
 		for (int key = 0; key < keys_of_selected.length; key++)
 			keys_of_selected[key] = Integer.parseInt(keys_of_selected_string[key]);
@@ -54,7 +52,7 @@ class GetParams {
 		System.out.println();
 
 		if (usingGold) {
-			String [] keys_of_gold_string = args[11].split(",");
+			String [] keys_of_gold_string = args[12].split(",");
 			int [] keys_of_gold = new int[keys_of_gold_string.length];
 			for (int key = 0; key < keys_of_gold.length; key++)
 				keys_of_gold[key] = Integer.parseInt(keys_of_gold_string[key]);
@@ -67,11 +65,5 @@ class GetParams {
 		}
 		else 
 			System.out.println("Keys of records used as gold data: Not Applicable");
-
-		String uploadedFile = args[12];
-		System.out.println("Uploaded file: " + uploadedFile);
-
-		// read upload file, and display content of records we chose.
-
 	}
 }
