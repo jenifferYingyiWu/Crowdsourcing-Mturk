@@ -1,0 +1,11 @@
+PrimaryKey, image, user, orientation, eye, expression, publishedURL
+1, faces_4/karyadi_left_sad_sunglasses_4.jpg, karyadi, left, sunglasses, sad, http://commpot.ru/images/iphone-204-20black.jpg
+2, faces_4/karyadi_left_angry_sunglasses_4.jpg, karyadi, left, sunglasses, angry, http://commpot.ru/images/1bfe9d8f888834ddb07d9dcbafefbf5b_thumb_6cdba0b7c90c77cd.jpeg
+3, faces_4/karyadi_left_neutral_sunglasses_4.jpg, karyadi, left, sunglasses, neutral, http://commpot.ru/images/8b3d28eb236f9b262b29da4f70ba6d91.jpg
+4, faces_4/karyadi_left_happy_sunglasses_4.jpg, karyadi, left, sunglasses, happy, http://commpot.ru/images/9d0e2b2cd03d036dbb9036dc955c3179.jpg
+5, faces_4/boland_straight_happy_sunglasses_4.jpg, boland, straight, sunglasses, happy, http://commpot.ru/images/021351_thm.jpg
+6, faces_4/boland_straight_angry_sunglasses_4.jpg, boland, straight, sunglasses, angry, http://commpot.ru/images/02381.jpg
+7, faces_4/boland_straight_neutral_sunglasses_4.jpg, boland, straight, sunglasses, neutral, http://commpot.ru/images/023811_thm.jpg
+8, faces_4/boland_straight_sad_sunglasses_4.jpg, boland, straight, sunglasses, sad, http://commpot.ru/images/1e8fdbcaa913665e51787d86e0e96c82.jpg
+9, faces_4/steffi_up_happy_sunglasses_4.jpg, steffi, up, sunglasses, sad, http://commpot.ru/images/3cb63931306340797e6bb691b818a472_thm.jpg
+10, faces_4/steffi_up_neutral_sunglasses_4.jpg, steffi, up, sunglasses, neutral, http://commpot.ru/images/3fe65dda81053d07d80c83bd8df51283.jpg

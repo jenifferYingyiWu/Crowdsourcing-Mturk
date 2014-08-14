@@ -1,1 +1,3 @@
 start xampp and open webpage to localhost/mturk/fileupload.html
+
+put mturk.properties in MTurkCrowdSourcing, which stores the access key and secret key information of your account
