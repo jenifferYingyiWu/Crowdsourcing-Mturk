@@ -6,22 +6,24 @@ import java.io.FileNotFoundException;
 
 class GetParams {
 	public static void main(String[] args) {
+		String questionFile = args[9];
+		String dataFile = args[10];
 		String title = args[0];
 		String description = args[1];
-		int labelsPerRecord = Integer.parseInt(args[2]);
+		int numAssignments = Integer.parseInt(args[2]);
 		double reward = Double.parseDouble(args[3]);
-		int HITduration = Integer.parseInt(args[4]);
+		double fractionToFail = Double.parseDouble(args[6]);
+		int duration = Integer.parseInt(args[4]);
+		int autoApproveDelay = Integer.parseInt(args[4]);
+		int lifetime = Integer.parseInt(args[4]);
 		Boolean usingGold = args[5].equals("true");
-		double rejectionThreshold = Double.parseDouble(args[6]);
 		double percentOfGold = 0;
 		String labelCol = "";
 		if (usingGold) {
 			percentOfGold = Double.parseDouble(args[7]);	
 			labelCol = args[8];
 		}
-		String dataFile = args[9];
-		String questionFile = args[10];
-
+		
 		System.out.println("Title: " + title);
 		System.out.println("Description: " + description);
 		System.out.println("Labels per record: " + labelsPerRecord);

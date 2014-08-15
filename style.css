@@ -4,20 +4,15 @@
 
 .bottom-margin { margin-bottom: 0.5cm; }
 
-input[name='title'], input[name='description'], input[name='categories'] {
-	width: 300px;
-}
+input.text { width: 300px; }
 
-input[name='labelsPerRecord'], input[name='reward'], input[name='rejectionThreshold'],
-input[name='minBatchSize'], input[name='HITduration'], input[name='percentOfGold'] {
-	width: 40px;
-}
+input.numeric { width: 40px; }
 
 label.topLabel {
 	float: left;
 	text-align: right;
 	margin-right: 5px;
-	width: 140px;
+	width: 250px;
 }
 
 label.botLabel {

@@ -36,22 +36,21 @@
 <?php
 	/*
 	exec("cd TurkHit; java -cp \".:external_jars/*\" mturkcrowdsourcing.MTurkCrowdSourcing"
-	
 		. " " .	$_POST["questionFile"] 
 		. " " . $_POST["dataFile"] 
 		. " " . "\"" . $_POST["title"] . "\""
 		. " " . "\"" . $_POST["description"] . "\""
-		. " " . $_POST["labelsPerRecord"] // numAssignments
+		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
-		. " " . $_POST["rejectionThreshold"]
-		. " " . "0" 
-		. " " . $_POST["HITduration"] 
-		. " " . "7200" 
-		. " " . "3600" 
-		. " " . "\"" . "face, orientation, picture, categorization, survey" . "\""
-		. " " . "5000" 
-		. " " . "PrimaryKey"
-		. " " . $_POST["labelCol"] 
+		. " " . $_POST["fractionToFail"]
+		. " " . $_POST["minGoldAnswered"]
+		. " " . $_POST["duration"] 
+		. " " . $_POST["autoApprovalDelay"] 
+		. " " . $_POST["lifetime"] 
+		. " " . "\"" . $_POST["keywords"] . "\""
+		. " " . $_POST["checkInterval"] 
+		. " " . $_POST["idCol"] 
+		. " " . $_POST["goldCol"] 
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
 		. " > /dev/null 2>/dev/null &");
@@ -61,17 +60,21 @@
 	// TESTING GetParams.java
 	// java [<option> ...] <class-name> [<argument> ...]
 	$output = shell_exec("java GetParams"
+		. " " .	$_POST["questionFile"] 
+		. " " . $_POST["dataFile"] 
 		. " " . "\"" . $_POST["title"] . "\""
 		. " " . "\"" . $_POST["description"] . "\""
-		. " " . $_POST["labelsPerRecord"] // numAssignments
+		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
-		. " " . $_POST["HITduration"] 
-		. " " . $_POST["usingGold"] 
-		. " " . $_POST["rejectionThreshold"]
-		. " " . $_POST["percentOfGold"] 
-		. " " . $_POST["labelCol"] 
-		. " " . $_POST["dataFile"]
-		. " " .	$_POST["questionFile"]
+		. " " . $_POST["fractionToFail"]
+		. " " . $_POST["minGoldAnswered"]
+		. " " . $_POST["duration"] 
+		. " " . $_POST["autoApprovalDelay"] 
+		. " " . $_POST["lifetime"] 
+		. " " . "\"" . $_POST["keywords"] . "\""
+		. " " . $_POST["checkInterval"] 
+		. " " . $_POST["idCol"] 
+		. " " . $_POST["goldCol"] 
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
 		. " 2>&1");

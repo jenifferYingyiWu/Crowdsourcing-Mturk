@@ -51,15 +51,25 @@ echo "Size: " . round($_FILES["questionFile"]["size"] / 1024,4) . " Kb<br>";
 
 <form action="createHIT.php" method="post" id="hit_form" class="bottom-margin">
 <label class="topLabel">Title:</label> 
-<input type="text" name="title"><br>
-<label class="topLabel">Description:</label>	
-<input type="text" name="description"><br>
-<label class="topLabel">Labels Per Record:</label> 
-<input type="text" name="labelsPerRecord"><br>
-<label class="topLabel">Reward ($):</label> 
-<input type="text" name="reward"><br>
-<label class="topLabel">Duration (seconds):</label>
-<input type="text" name="HITduration"><br><br>
+<input class="text" type="text" name="title"><br>
+<label class="topLabel text">Description:</label>	
+<input class="text" type="text" name="description"><br>
+<label class="topLabel text">Keywords:</label>	
+<input class="text" type="text" name="keywords"><br>
+<label class="topLabel numeric">Number of Assignments:</label> 
+<input class="numeric" type="text" name="numAssignments"><br>
+<label class="topLabel numeric">Reward ($):</label> 
+<input class="numeric" type="text" name="reward"><br>
+<label class="topLabel numeric">Duration (seconds):</label>
+<input class="numeric" type="text" name="duration"><br>
+<label class="topLabel numeric">Auto Approval Delay (seconds):</label>
+<input class="numeric" type="text" name="autoApprovalDelay"><br>
+<label class="topLabel numeric">Lifetime (seconds):</label>
+<input class="numeric" type="text" name="lifetime"><br>
+<label class="topLabel numeric">Check Interval (milliseconds):</label>
+<input class="numeric" type="text" name="checkInterval"><br>
+<label class="topLabel">Name of column with primary keys:</label>
+<input type="text" name="idCol"><br><br>
 
 <b>To verify a user is submitting good data:</b><br>
 <input type="radio" name="usingGold" value="false" checked>Use all selected records 
@@ -67,15 +77,16 @@ with the crowd's majority vote as labels.<br>
 <input type="radio" name="usingGold" value="true">Use a subset 
 of the selected records as gold data. Labels must available.<br><br>
 
-<label class="botLabel">Reject if classification accuracy on above 
-selected data is less than:</label>
-<input type="text" name="rejectionThreshold"><br>
+<label class="botLabel">Reject worker if accuracy on above selected data is less than:</label>
+<input class="numeric" type="text" name="fractionToFail"><br>
 
 <div class="usingGold">
-<label class="botLabel">Proportion of gold data randomly chosen to attach to each group:</label>
-<input type="text" name="percentOfGold"><br>
-<label class="botLabel">Name of column with the labels:</label>
-<input type="text" name="labelCol"><br>
+<label class="botLabel">Reject worker if number of gold questions answered is less than:</label>
+<input class="numeric" type="text" name="minGoldAnswered"><br>
+<label class="botLabel numeric">Proportion of gold data randomly chosen to attach to each group:</label>
+<input class="numeric" type="text" name="percentOfGold"><br>
+<label class="botLabel">Name of column with gold labels:</label>
+<input type="text" name="goldCol"><br>
 </div>
 
 <input type="hidden" name="dataFile" value="<?php echo $_FILES["dataFile"]["name"]; ?>">
@@ -117,13 +128,8 @@ $columnNames = array_map('trim', $columnNames);
 echo "<table id=\"data\" border=\"1\">";
 echo "<thead><tr>";
 for ($i = 0; $i < $numCols; $i++)
-	echo "<th align=\"left\">" . $columnNames[$i] . "</th>";
+	echo "<th align=\"left\">" . trim($columnNames[$i],"*") . "</th>";
 echo "</tr></thead><tbody>";
-
-if (isset($_POST['imageCols']))
-	$imageCols = explode(",", $_POST['imageCols']);
-else
-	$imageCols = array("-1");
 
 $numRecords = 0;
 while ($line = fgetcsv($handle)) {
@@ -131,8 +137,8 @@ while ($line = fgetcsv($handle)) {
 	echo "<tr class='unselected'>";
 	for ($i = 0; $i < $numCols; $i++) {
 		echo "<td>";
-		if (in_array($columnNames[$i], $imageCols))
-			echo "<image src=\"" . $line[$i] . "\">";	
+		if (substr($columnNames[$i], -1) == "*")
+			echo "<image src=\"" . $line[$i] . "\" style=\"max-height: 40px\">";	
 		else 
 			echo $line[$i];	
 		echo "</td>";

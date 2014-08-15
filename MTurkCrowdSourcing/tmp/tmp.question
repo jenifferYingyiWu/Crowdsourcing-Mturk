@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
+	<Question>
+		<QuestionIdentifier>1</QuestionIdentifier>
+		<IsRequired>true</IsRequired>
+		<QuestionContent>
+            <Text>Question 2:</Text>
+            <Text>Cheat: left</Text>
+			<Text>What's the orientation of the face in the following picture?</Text>
+			<EmbeddedBinary>
+				<EmbeddedMimeType>
+					<Type>image</Type>
+					<SubType>jpg</SubType>
+				</EmbeddedMimeType>
+				<DataURL></DataURL>
+				<AltText>error displaying the image</AltText>
+				<Width>400</Width>
+				<Height>300</Height>
+			</EmbeddedBinary>
+		</QuestionContent>
+		<AnswerSpecification>
+			<SelectionAnswer>
+				<MinSelectionCount>1</MinSelectionCount>
+				<MaxSelectionCount>1</MaxSelectionCount>
+				<Selections>
+					<Selection>
+						<SelectionIdentifier>L</SelectionIdentifier>
+						<Text>left</Text>
+					</Selection>
+					<Selection>
+						<SelectionIdentifier>R</SelectionIdentifier>
+						<Text>right</Text>
+					</Selection>
+					<Selection>
+						<SelectionIdentifier>U</SelectionIdentifier>
+						<Text>up</Text>
+					</Selection>
+                    <Selection>
+						<SelectionIdentifier>S</SelectionIdentifier>
+						<Text>straight</Text>
+					</Selection>
+				</Selections>
+			</SelectionAnswer>
+		</AnswerSpecification>
+	</Question>
+</QuestionForm>
+
+

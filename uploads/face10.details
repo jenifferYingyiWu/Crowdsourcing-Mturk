@@ -1,4 +1,4 @@
-PrimaryKey, image, user, orientation, eye, expression, publishedURL
+PrimaryKey, image*, user, orientation, eye, expression, publishedURL*
 1, faces_4/karyadi_left_sad_sunglasses_4.jpg, karyadi, left, sunglasses, sad, http://commpot.ru/images/iphone-204-20black.jpg
 2, faces_4/karyadi_left_angry_sunglasses_4.jpg, karyadi, left, sunglasses, angry, http://commpot.ru/images/1bfe9d8f888834ddb07d9dcbafefbf5b_thumb_6cdba0b7c90c77cd.jpeg
 3, faces_4/karyadi_left_neutral_sunglasses_4.jpg, karyadi, left, sunglasses, neutral, http://commpot.ru/images/8b3d28eb236f9b262b29da4f70ba6d91.jpg

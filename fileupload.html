@@ -12,6 +12,7 @@
 <ul>
 <li>The file must be in CSV format.</li>
 <li>The first line must contain the names of the columns.</li>
+<li>If a column contains image links, an asterisk must be placed immediately after the column name.
 <li>Image links must be:
 	<ul>
 		<li>relative, if the images are stored on this web server.</li>
@@ -19,17 +20,20 @@
 	</ul>
 </ul>
 <input type="file" name="dataFile"><br>
-<label>Comma separated list of columns names with image links:</label>
-<input type="text" name="imageCols"><br>
 
 <h3>Specify Question Format File</h3>
 <ul>
 <li>It must be an XML file conforming to the <span class="italic">QuestionForm</span> schema.</li>
-<li>If ${column_name} is found within tags, it will be replaced by the contents of the 
+<li>If ${column_name} is found within a field, it will be replaced by the contents of the 
 	specified column in the actual HIT.</li>
-<li>The answer must be selected with radio buttons, and the 
-	<span class="italic">SelectionIdentifier</span> tags must contain the possible values for the labels.</li>
+<li>The answer must be in the form of one radio button question where:</li>
+	<ul>
+		<li>The &lt;SelectionIdentifier&gt; fields contain unique strings representing
+			the actual answers in the &lt;Text&gt; field.</li>
+		<li>Only 1 answer can be chosen (min=1, max=1).</li>
+	</ul>
 </ul>
+
 <input type="file" name="questionFile"><br><br>
 
 <input type="submit" value="Upload">
