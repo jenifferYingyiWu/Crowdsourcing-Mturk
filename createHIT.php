@@ -4,6 +4,7 @@
 <title>HIT Created</title>
 <script type="text/javascript">
 	var numSelected = <?php echo json_encode(count(explode(",", $_POST["keys_of_selected"]))); ?>;
+	var crowdHistoryFile = <?php echo json_encode($_POST["crowdHistoryFile"]); ?>;
 
 	function loadXMLDoc() {
 		var xmlhttp = new XMLHttpRequest();
@@ -27,7 +28,7 @@
 		}
 		// add '?t='+Math.random() to prevent caching. Makes webserver realize
 		// that we are loading a new (possibly updated) document each time.
-		xmlhttp.open('GET', 'MTurkCrowdSourcing/history/tweetCrowdHistory?t=' + Math.random());
+		xmlhttp.open('GET', 'MTurkCrowdSourcing/history/' + crowdHistoryFile + '?t=' + Math.random());
 		xmlhttp.send();
 	}
 </script>
