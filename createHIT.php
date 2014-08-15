@@ -53,6 +53,7 @@
 		. " " . $_POST["goldCol"] 
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
+		. " " . $_POST["crowdHistoryFile"] 
 		. " > /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 	*/

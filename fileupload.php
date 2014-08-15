@@ -69,7 +69,9 @@ echo "Size: " . round($_FILES["questionFile"]["size"] / 1024,4) . " Kb<br>";
 <label class="topLabel numeric">Check Interval (milliseconds):</label>
 <input class="numeric" type="text" name="checkInterval"><br>
 <label class="topLabel">Name of column with primary keys:</label>
-<input type="text" name="idCol"><br><br>
+<input type="text" name="idCol"><br>
+<label class="topLabel">Name of crowd history file:</label>
+<input type="text" name="crowdHistoryFile"><br><br>
 
 <b>To verify a user is submitting good data:</b><br>
 <input type="radio" name="usingGold" value="false" checked>Use all selected records 
