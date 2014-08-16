@@ -4,6 +4,7 @@
 <title>Upload File</title>
 <style type="text/css">
 	.italic { font-style: italic; }
+	input[name='imageCols'] { width: 200px; }
 </style>
 </head>
 <body>
@@ -12,7 +13,6 @@
 <ul>
 <li>The file must be in CSV format.</li>
 <li>The first line must contain the names of the columns.</li>
-<li>If a column contains image links, an asterisk must be placed immediately after the column name.
 <li>Image links must be:
 	<ul>
 		<li>relative, if the images are stored on this web server.</li>
@@ -20,6 +20,8 @@
 	</ul>
 </ul>
 <input type="file" name="dataFile"><br>
+<label>Comma separated list of columns with image links:</label>
+<input type="text" name="imageCols">
 
 <h3>Specify Question Format File</h3>
 <ul>
@@ -29,8 +31,8 @@
 <li>The answer must be in the form of one radio button question where:</li>
 	<ul>
 		<li>The &lt;SelectionIdentifier&gt; fields contain unique strings representing
-			the actual answers in the &lt;Text&gt; field.</li>
-		<li>Only 1 answer can be chosen (min=1, max=1).</li>
+			the actual answers in the &lt;Text&gt; fields.</li>
+		<li>Only 1 radio button can be selected as the answer (min=1, max=1).</li>
 	</ul>
 </ul>
 

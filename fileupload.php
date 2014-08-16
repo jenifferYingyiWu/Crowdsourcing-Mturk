@@ -130,8 +130,10 @@ $columnNames = array_map('trim', $columnNames);
 echo "<table id=\"data\" border=\"1\">";
 echo "<thead><tr>";
 for ($i = 0; $i < $numCols; $i++)
-	echo "<th align=\"left\">" . trim($columnNames[$i],"*") . "</th>";
+	echo "<th align=\"left\">" . $columnNames[$i] . "</th>";
 echo "</tr></thead><tbody>";
+
+$imageCols = explode(",", $_POST['imageCols']);
 
 $numRecords = 0;
 while ($line = fgetcsv($handle)) {
@@ -139,7 +141,7 @@ while ($line = fgetcsv($handle)) {
 	echo "<tr class='unselected'>";
 	for ($i = 0; $i < $numCols; $i++) {
 		echo "<td>";
-		if (substr($columnNames[$i], -1) == "*")
+		if (in_array($columnNames[$i], $imageCols))
 			echo "<image src=\"" . $line[$i] . "\" style=\"max-height: 40px\">";	
 		else 
 			echo $line[$i];	

@@ -4,7 +4,7 @@
 		<QuestionIdentifier>1</QuestionIdentifier>
 		<IsRequired>true</IsRequired>
 		<QuestionContent>
-            <Text>Question 2:</Text>
+            <Text>Question 3:</Text>
             <Text>Cheat: left</Text>
 			<Text>What's the orientation of the face in the following picture?</Text>
 			<EmbeddedBinary>
@@ -12,7 +12,7 @@
 					<Type>image</Type>
 					<SubType>jpg</SubType>
 				</EmbeddedMimeType>
-				<DataURL></DataURL>
+				<DataURL>http://commpot.ru/images/8b3d28eb236f9b262b29da4f70ba6d91.jpg</DataURL>
 				<AltText>error displaying the image</AltText>
 				<Width>400</Width>
 				<Height>300</Height>
