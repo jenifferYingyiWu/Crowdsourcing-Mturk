@@ -72,23 +72,26 @@ $(document).ready(function() {
 		$("#numGold").html(numGold);	
 	});
 
-	$(".usingGold").css('display', 'none');
-	$("input[name='percentOfGold']").val('-1'); 
-	$("input[name='labelCol']").val('-1'); 
+	// on page load
+	if ($("input[name='usingGold']:checked").val() == 'false') {
+		$(".usingGold").css('display', 'none');
+		$("input[name='goldCol']").val('-1'); 
+		$("input[name='minGoldAnswered']").val('-1'); 
+	}
 
 	$("input[name='usingGold']").change(function() {
 		if ($("input[name='usingGold']:checked").val() == 'true') {
 			$(".usingGold").css('display', 'block');
-			$("input[name='percentOfGold']").val(''); 
-			$("input[name='labelCol']").val(''); 
+			$("input[name='goldCol']").val(''); 
+			$("input[name='minGoldAnswered']").val(''); 
 			$("#tableRotations").html(
 				"unselected &#8594; selected &#8594; gold &#8594; unselected.");
 		}
 		else {
 			$(".usingGold").css('display', 'none');
 			// dummy vals for java command line arguments
-			$("input[name='percentOfGold']").val('-1'); 
-			$("input[name='labelCol']").val('-1'); 
+			$("input[name='goldCol']").val('-1'); 
+			$("input[name='minGoldAnswered']").val('-1'); 
 			$("#tableRotations").html("unselected &#8594; selected &#8594; unselected.");
 
 			// if we first selected 'usingGold' and selected some gold data, 

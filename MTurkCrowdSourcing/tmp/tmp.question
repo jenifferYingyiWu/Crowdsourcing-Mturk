@@ -4,19 +4,8 @@
 		<QuestionIdentifier>1</QuestionIdentifier>
 		<IsRequired>true</IsRequired>
 		<QuestionContent>
-            <Text>Question 3:</Text>
-            <Text>Cheat: left</Text>
-			<Text>What's the orientation of the face in the following picture?</Text>
-			<EmbeddedBinary>
-				<EmbeddedMimeType>
-					<Type>image</Type>
-					<SubType>jpg</SubType>
-				</EmbeddedMimeType>
-				<DataURL>http://commpot.ru/images/8b3d28eb236f9b262b29da4f70ba6d91.jpg</DataURL>
-				<AltText>error displaying the image</AltText>
-				<Width>400</Width>
-				<Height>300</Height>
-			</EmbeddedBinary>
+			<Text>Determine the sentiment of the following tweet: </Text>
+            <Text>3: OH YAY. I have 70 people following me! Thanks everybody~!   In other news, I'm replaying through Ocarina of Time.:</Text>
 		</QuestionContent>
 		<AnswerSpecification>
 			<SelectionAnswer>
@@ -24,20 +13,12 @@
 				<MaxSelectionCount>1</MaxSelectionCount>
 				<Selections>
 					<Selection>
-						<SelectionIdentifier>L</SelectionIdentifier>
-						<Text>left</Text>
+						<SelectionIdentifier>0</SelectionIdentifier>
+						<Text>negative</Text>
 					</Selection>
 					<Selection>
-						<SelectionIdentifier>R</SelectionIdentifier>
-						<Text>right</Text>
-					</Selection>
-					<Selection>
-						<SelectionIdentifier>U</SelectionIdentifier>
-						<Text>up</Text>
-					</Selection>
-                    <Selection>
-						<SelectionIdentifier>S</SelectionIdentifier>
-						<Text>straight</Text>
+						<SelectionIdentifier>1</SelectionIdentifier>
+						<Text>positive</Text>
 					</Selection>
 				</Selections>
 			</SelectionAnswer>

@@ -85,8 +85,6 @@ of the selected records as gold data. Labels must available.<br><br>
 <div class="usingGold">
 <label class="botLabel">Reject worker if number of gold questions answered is less than:</label>
 <input class="numeric" type="text" name="minGoldAnswered"><br>
-<label class="botLabel numeric">Proportion of gold data randomly chosen to attach to each group:</label>
-<input class="numeric" type="text" name="percentOfGold"><br>
 <label class="botLabel">Name of column with gold labels:</label>
 <input type="text" name="goldCol"><br>
 </div>
