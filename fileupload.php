@@ -77,7 +77,7 @@ echo "Size: " . round($_FILES["questionFile"]["size"] / 1024,4) . " Kb<br>";
 <input type="radio" name="usingGold" value="false" checked>Use all selected records 
 with the crowd's majority vote as labels.<br>
 <input type="radio" name="usingGold" value="true">Use a subset 
-of the selected records as gold data. Labels must available.<br><br>
+of the selected records as gold data. Gold labels must available.<br><br>
 
 <label class="botLabel">Reject worker if accuracy on above selected data is less than:</label>
 <input class="numeric" type="text" name="fractionToFail"><br>

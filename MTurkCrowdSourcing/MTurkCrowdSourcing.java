@@ -135,8 +135,7 @@ public class MTurkCrowdSourcing {
             }
             for(int j=0; j<r.getNumResults(); j++){
                 Assignment ass = r.getAssignment(j);
-                Answer ans = new Answer();
-                ans.workerID = ass.getWorkerId();
+                Answer ans = new Answer(); ans.workerID = ass.getWorkerId();
                 ans.assignmentID = ass.getAssignmentId();
                 
                 for(String k : choices.keySet()){
@@ -360,8 +359,8 @@ public class MTurkCrowdSourcing {
             }
             
             if(expire){
-                System.out.println("\nProgram terminates because HIT deadline has passed");
-                writer.write("\nProgram terminates because HIT deadline has passed\n");
+                System.out.println("Program terminates because HIT deadline has passed");
+                writer.write("Program terminates because HIT deadline has passed\n");
                 writer.close();
                 break;
             }

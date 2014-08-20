@@ -4,8 +4,9 @@
 		<QuestionIdentifier>1</QuestionIdentifier>
 		<IsRequired>true</IsRequired>
 		<QuestionContent>
-			<Text>Determine the sentiment of the following tweet: </Text>
-            <Text>${ID}: ${Text}:</Text>
+			<Text>Determine the sentiment of the following tweet: (0 for negative and 1 for positive)</Text>
+            <Text>Q${ID}: ${Text}:</Text>
+            <Text>Cheat: ${Sentiment}</Text>
 		</QuestionContent>
 		<AnswerSpecification>
 			<SelectionAnswer>
@@ -14,11 +15,11 @@
 				<Selections>
 					<Selection>
 						<SelectionIdentifier>0</SelectionIdentifier>
-						<Text>negative</Text>
+						<Text>0</Text>
 					</Selection>
 					<Selection>
 						<SelectionIdentifier>1</SelectionIdentifier>
-						<Text>positive</Text>
+						<Text>1</Text>
 					</Selection>
 				</Selections>
 			</SelectionAnswer>
