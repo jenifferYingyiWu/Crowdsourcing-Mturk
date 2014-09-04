@@ -5,5 +5,5 @@ Put mturk.properties in MTurkCrowdSourcing, which stores the access key and secr
 Website Structure
 -----------------
 login --> home --> uploadFiles --> collectParameters --> createHIT --> home
- L--> register _____|		   --> viewResults --> home
- L--> recovery				   --> changeKeys --> home
+ L--> register _____|          --> viewResults --> home
+ L--> recovery                 --> changeKeys --> home
