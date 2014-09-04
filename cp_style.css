@@ -1,0 +1,26 @@
+#data tbody tr.unselected { background-color: white; }
+#data tbody tr.selected { background-color: #B0BED8; }
+#data tbody tr.gold { background-color: #FFD700; }
+#data { margin-bottom: 10px; }
+
+.bottom-margin { margin-bottom: 0.5cm; }
+
+input.text { width: 300px; }
+input.numeric { width: 40px; }
+
+#topTable, #middleTable { border-collapse: collapse; }
+#topTable td:first-child, #middleTable td:first-child { text-align: right; }
+
+/* no text highlighting in table (when clicking table rows) */
+#data {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: moz-none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+#lastUsingGold {
+	margin-bottom: 10px;
+}
