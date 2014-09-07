@@ -4,7 +4,7 @@
 	<title>Specify Task Parameters</title>
 	<link rel="stylesheet" type="text/css" href="cp_style.css">
 	<script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
-	<script src="chooseTweet.js" type="text/javascript"></script>
+	<script src="cp_script.js" type="text/javascript"></script>
 	<meta charset="utf-8">
 </head>
 <body>

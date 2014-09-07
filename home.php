@@ -22,6 +22,7 @@ echo '<h3>Welcome, ' . $_SESSION['username'] . '!</h3>';
 <li><a href="uploadFiles.html">Crowdsource Labels</a></li>
 <li><a href="viewResults.php">View Previous Results</a></li>
 <li><a href="changeKeys.html">Change Access Keys</a></li>
+<li><a href="logout.php">Logout</a></li>
 </ul>
 </div>
 </body>

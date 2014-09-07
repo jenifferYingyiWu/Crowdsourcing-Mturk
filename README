@@ -1,9 +1,0 @@
-Start xampp and open webpage to localhost/mturk/login.html
-
-Put mturk.properties in MTurkCrowdSourcing, which stores the access key and secret key information of your account
-
-Website Structure
------------------
-login --> home --> uploadFiles --> collectParameters --> createHIT --> home
- L--> register _____|          --> viewResults --> home
- L--> recovery                 --> changeKeys --> home
