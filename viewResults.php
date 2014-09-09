@@ -2,6 +2,9 @@
 <html>
 <head>
 <title>View Results</title>
+<style>
+	a:visited { color: blue; }
+</style>
 </head>
 <body>
 <?php
@@ -21,5 +24,6 @@ foreach (new DirectoryIterator('users/' . $_SESSION['username']) as $fileInfo) {
 	echo $endText . "<br><br>";
 }
 ?>
+<a href="home.php">Go Home</a>
 </body>
 </html>

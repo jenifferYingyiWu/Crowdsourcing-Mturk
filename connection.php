@@ -1,8 +1,8 @@
 <?php
 $db_host = 'localhost';
-$db_username = 'root';
+$db_username = 'cs_mturk';
 $db_password = 'umdb2014';
-$db_name = 'login';
+$db_name = 'cs_mturk';
 
 mysql_connect($db_host, $db_username, $db_password)
 	or die("Failed to connect to MySQL.");
