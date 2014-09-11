@@ -11,4 +11,3 @@ login --> home --> uploadFiles --> collectParameters --> createHIT --\
  L--> register _____|       L----> viewResults -----------------------\  Home
  L--> recovery              L----> changeKeys ------------------------/     
                             L----> logout ---------------------------/      
-								
