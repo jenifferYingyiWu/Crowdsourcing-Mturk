@@ -48,7 +48,7 @@ a:visited { color: blue; }
 <body>
 <?php
 	session_start();
-	$_SESSION['resultsFile'] = $_POST['resultsFile'];
+	$username = $_SESSION['username'];
 
 	exec("cd MTurkCrowdSourcing; java -cp \"external_jars/*:.\" mturkcrowdsourcing.MTurkCrowdSourcing"
 		. " " .	$_POST["questionFile"] 
@@ -68,7 +68,8 @@ a:visited { color: blue; }
 		. " " . $_POST["goldCol"] 
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
-		. " " . "csHistory"
+		. " " . $_POST["resultsFile"] 
+		. " " . $username
 		. "> /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 
