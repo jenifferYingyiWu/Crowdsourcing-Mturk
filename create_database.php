@@ -20,9 +20,7 @@
 		username VARCHAR(30) NOT NULL, 
 		email VARCHAR(50) NOT NULL,
 		salt CHAR(128) NOT NULL,
-		encryptedPassword CHAR(128) NOT NULL,
-		accessKeyID VARCHAR(32) NOT NULL,
-		secretAccessKey VARCHAR(32) NOT NULL
+		encryptedPassword CHAR(128) NOT NULL
 	)"; 
 	mysql_query($sql) or die("Error creating members table: " . mysql_error());
 

@@ -1,17 +1,14 @@
 <?php
 	session_start();
-	include('connection.php');
 	
 	$accessKeyID = mysql_real_escape_string($_POST['accessKeyID']);
 	$secretAccessKey = mysql_real_escape_string($_POST['secretAccessKey']);
 	$username = $_SESSION['username'];
 
-	$sql = "UPDATE members
-			SET accessKeyID = '$accessKeyID', secretAccessKey = '$secretAccessKey'
-			WHERE username = '$username'";
-	$result = mysql_query($sql);
-	if (!$result) 
-		die('Invalid query: ' . mysql_error());
-
+	$text = file_get_contents('MTurkCrowdSourcing/mturk.properties');	
+	$text = preg_replace('/access_key=.*/', 'access_key=' . $accessKeyID, $text);
+	$text = preg_replace('/secret_key=.*/', 'secret_key=' . $secretAccessKey, $text);
+	file_put_contents('users/' . $username . '/mturk.properties', $text);
+	
 	header('location: home.php');
 ?>

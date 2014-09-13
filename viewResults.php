@@ -9,12 +9,16 @@
 <body>
 <?php
 session_start();
-foreach (new DirectoryIterator('users/' . $_SESSION['username']) as $fileInfo) {
+$username = $_SESSION['username'];
+$resultsDir = 'users/' . $username . '/results/';
+$noFiles = True;
+foreach (new DirectoryIterator($resultsDir) as $fileInfo) {
 	if ($fileInfo->isDot()) // skip . or ..
 		continue;
+	$noFiles = False;
 	echo "<b>" . $fileInfo->getFilename() . "</b>";
 	$contents = split("\n", 
-		file_get_contents('users/' . $_SESSION['username'] . '/' . $fileInfo->getFilename()));
+		file_get_contents($resultsDir . $fileInfo->getFilename()));
 	$i = count($contents) - 3;
 	$endText = "";
 	while (strlen($contents[$i]) != 0) {
@@ -23,6 +27,8 @@ foreach (new DirectoryIterator('users/' . $_SESSION['username']) as $fileInfo) {
 	}
 	echo $endText . "<br><br>";
 }
+if ($noFiles)
+	echo 'You have not crowdsourced any labels yet.<br><br>';
 ?>
 <a href="home.php">Go Home</a>
 </body>

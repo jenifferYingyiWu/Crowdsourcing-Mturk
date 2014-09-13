@@ -14,7 +14,7 @@
 
 		xmlhttp.onload = function() {
 			var responseText_split = (xmlhttp.responseText).split("\n");
-			// only show reponses once the first time stamped results come in
+			// only show reponses once the first timestamped results come in
 			if (responseText_split.length > numSelected+2) {
 				// accumulate lines by reading from start forwards until blank line
 				var responseTextStart = "";
@@ -30,10 +30,6 @@
 				// accumulate lines by reading from end backwards until blank line
 				var responseTextEnd = "";
 				i = responseText_split.length-2;
-				if (responseText_split[i].substring(0,6) == 'Finish') {
-					// call php to copy csHistory to users folder.		
-					$.get("moveHistoryFile.php");
-				}
 				while (responseText_split[i].length != 0) {
 					responseTextEnd = ("<br>" + responseText_split[i]) + responseTextEnd;
 					i--;

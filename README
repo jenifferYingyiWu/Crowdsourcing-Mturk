@@ -1,12 +1,11 @@
-Start xampp and open webpage to localhost/mturk/login.html
-
-Put mturk.properties in MTurkCrowdSourcing, which stores the access key and secret key information of your account
-
+Create a new mysql user with username 'cs_mturk' and password 'umdb2014'.
 Run create_database.php to create the cs_mturk database and corresponding tables.
+
+Start webserver (e.g. xampp) and open webpage to localhost/mturk/login.html
 
 Website Structure
 -----------------
 login --> home --> uploadFiles --> collectParameters --> createHIT --\       
- L--> register _____|       L----> viewResults -----------------------\  Home
+ L--> register _____|       L----> viewResults -----------------------\  home
  L--> recovery              L----> changeKeys ------------------------/     
                             L----> logout ---------------------------/      
