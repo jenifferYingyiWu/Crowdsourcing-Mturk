@@ -1,5 +1,10 @@
-Create a new mysql user with username 'cs_mturk' and password 'umdb2014'.
-Run create_database.php to create the cs_mturk database and corresponding tables.
+Create a new mysql user with username 'cs_mturk' and password 'umdb2014'
+by typing this in your mysql command prompt:
+
+CREATE USER 'cs_mturk'@'localhost' IDENTIFIED BY 'umdb2014'
+GRANG ALL PRIVILEGES ON * . * TO 'cs_mturk'@'localhost'
+
+Run create_database.php to create the cs_mturk database and members table.
 
 Start webserver (e.g. xampp) and open webpage to localhost/mturk/login.html
 

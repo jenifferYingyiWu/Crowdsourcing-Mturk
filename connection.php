@@ -1,5 +1,5 @@
 <?php
-$db_host = 'localhost';
+$db_host = '127.0.0.1';
 $db_username = 'cs_mturk';
 $db_password = 'umdb2014';
 $db_name = 'cs_mturk';
