@@ -40,6 +40,7 @@ import javax.xml.transform.TransformerException;
 import javax.xml.transform.TransformerFactory;
 import javax.xml.transform.dom.DOMSource;
 import javax.xml.transform.stream.StreamResult;
+import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -80,9 +81,13 @@ public class MTurkCrowdSourcing {
     private boolean expire;
     private long checkInterval;
     private int minGoldAnswer;
-    private String tmpFile = "./tmp/tmp.question";
+    private String tmpFile = (new java.io.File( "." ).getCanonicalPath()) + "/tmp/tmp.question_"+Long.toString(Calendar.getInstance().getTime().getTime());
     private FileWriter writer;
     private String crowdHistoryFile;
+    private boolean ifPayRejected;
+    private boolean ifBlockRejected;
+    private int blockMin;
+    private List<String> rejectedAssID = new ArrayList<String>();
     
     void postAllQuestions() throws IOException, Exception{
         
@@ -92,7 +97,7 @@ public class MTurkCrowdSourcing {
             PrintWriter writer = new PrintWriter(tmpFile, "UTF-8");
             writer.println(q.qString);
             writer.close();
-            HITQuestion question = new HITQuestion("./" + tmpFile);
+            HITQuestion question = new HITQuestion(tmpFile);
             HIT hit = service.createHIT(null,
                 title, description, keywords, question.getQuestion(),
                 rewardPerHitInDollars, assignmentDurationInSeconds,
@@ -135,7 +140,8 @@ public class MTurkCrowdSourcing {
             }
             for(int j=0; j<r.getNumResults(); j++){
                 Assignment ass = r.getAssignment(j);
-                Answer ans = new Answer(); ans.workerID = ass.getWorkerId();
+                Answer ans = new Answer();
+                ans.workerID = ass.getWorkerId();
                 ans.assignmentID = ass.getAssignmentId();
                 
                 for(String k : choices.keySet()){
@@ -259,6 +265,15 @@ public class MTurkCrowdSourcing {
             for(String key : workerID_CorrectNum_Map.keySet()){
                 double ratio = ((double)workerID_CorrectNum_Map.get(key))/((double) workerID_CorrectNum_Map.get(key) + (double) workerID_WrongNum_Map.get(key));
                 if(ratio < fractionToFail){
+                    
+                    if(ifBlockRejected){
+                        if(((double) workerID_CorrectNum_Map.get(key) + (double) workerID_WrongNum_Map.get(key)) >= blockMin){
+                            service.blockWorker(key, "rejected worker got blocked");
+                        }
+                    }
+                    
+                    
+                    
                     result.add(key);
                 }
             }
@@ -278,6 +293,12 @@ public class MTurkCrowdSourcing {
                         workerID_WrongNum_Map.get(key)<minGoldAnswer) ||
                         (!workerID_WrongNum_Map.containsKey(key) &&workerID_CorrectNum_Map.get(key)<minGoldAnswer)
                         || (workerID_WrongNum_Map.get(key)+workerID_CorrectNum_Map.get(key)<minGoldAnswer)){
+                    
+                    if(ifBlockRejected){
+                        if(((double) workerID_CorrectNum_Map.get(key) + (double) workerID_WrongNum_Map.get(key)) >= blockMin){
+                            service.blockWorker(key, "rejected worker got blocked");
+                        }
+                    }
                     result.add(key);
                 }
             }
@@ -335,8 +356,8 @@ public class MTurkCrowdSourcing {
                 List<String> badWorkerIDs = getBadWorkerIDs();
                 if(badWorkerIDs.isEmpty()){
                     printStatus();
-                    System.out.println("Finish! Those assignments will be approved automatically in " + autoApprovalDelayInSeconds + " seconds after their submission time.");
-                    writer.write("Finish! Those assignments will be approved automatically in " + autoApprovalDelayInSeconds + " seconds after their submission time.\n");
+                    System.out.println("Finish! Those assignments will be approved automatically in " + autoApprovalDelayInSeconds + " seconds after their submission time.\n");
+                    writer.write("Finish! Those assignments will be approved automatically in " + autoApprovalDelayInSeconds + " seconds after their submission time.");
                     writer.close();
                     break;
                 }else{
@@ -348,6 +369,9 @@ public class MTurkCrowdSourcing {
                                 AssignmentStatus[] assStatus = new AssignmentStatus[] { AssignmentStatus.Rejected };
                                 GetAssignmentsForHITResult curRejected = service.getAssignmentsForHIT(allQuestions.get(i).hitID, SortDirection.Ascending, assStatus, GetAssignmentsForHITSortProperty.SubmitTime, null, null, null);
                                 service.rejectAssignment(assID,null);
+                                
+                                rejectedAssID.add(assID);
+                                
                                 service.extendHIT(allQuestions.get(i).hitID, numAssignments + curRejected.getNumResults() + 1, null);
                             } 
                         }
@@ -368,7 +392,19 @@ public class MTurkCrowdSourcing {
             writer.close();
             
         }
+        File dir = new File(tmpFile);
+        dir.delete();
         
+        
+        this.writer = new FileWriter(crowdHistoryFile,true);
+        if(ifPayRejected){
+            for(int i=0; i<rejectedAssID.size(); i++){
+                service.approveRejectedAssignment(rejectedAssID.get(i), "rejected, but approved again only for the purpose to pay rejected worker");
+            }
+            System.out.println("The rejected assignments have been apporved, only for the purpose to pay rejected workers.\n");
+            writer.write("The rejected assignments have been apporved, only for the purpose to pay rejected workers.\n");
+        }
+        writer.close();
         
     }
     
@@ -377,7 +413,8 @@ public class MTurkCrowdSourcing {
             ArrayList<Question> allQuestions, long assignmentDurationInSeconds,
             long autoApprovalDelayInSeconds, long lifetimeInSeconds,
             String keywords, Map<String, String> choices, long checkInterval, 
-            String qFile, String crowdHistoryFile, int minGoldAnswer) throws IOException{
+            String qFile, String crowdHistoryFile, int minGoldAnswer,
+            boolean ifPayRejected,boolean ifBlockRejected, int blockMin) throws IOException{
         this.allQuestions = allQuestions;
         this.assignmentDurationInSeconds = assignmentDurationInSeconds;
         this.autoApprovalDelayInSeconds = autoApprovalDelayInSeconds;
@@ -395,6 +432,10 @@ public class MTurkCrowdSourcing {
         this.minGoldAnswer = minGoldAnswer;
         this.curResult = new ArrayList<List<Answer>>();
         this.service = new RequesterService(new PropertiesClientConfig());
+        this.ifPayRejected = ifPayRejected;
+        this.ifBlockRejected = ifBlockRejected;
+        this.blockMin = blockMin;
+        
     }
 
     static ArrayList<String> getList(String s){//seperated by commas, no space in between
@@ -409,13 +450,36 @@ public class MTurkCrowdSourcing {
         return result;
     }
     
+    public static boolean deleteDir(File dir) {
+      if (dir.isDirectory()) {
+         String[] children = dir.list();
+         for (int i = 0; i < children.length; i++) {
+            boolean success = deleteDir
+            (new File(dir, children[i]));
+            if (!success) {
+               return false;
+            }
+         }
+      }
+      return dir.delete();
+    }
+    
 
     public static void main(String[] args) throws IOException, Exception{
 
         
         
-        String qFile = "../uploads/" + args[0];
-        String dataFile = "../uploads/" + args[1];
+        String username = args[18];
+        
+        String current = new java.io.File( "." ).getPath();
+        System.setProperty("user.dir", current+"/../users/"+username);
+        current = new java.io.File( "." ).getCanonicalPath();
+        
+        File dir = new File(current+"/tmp");
+        dir.mkdir();
+
+        String qFile = current+"/../../uploads/" + args[0];
+        String dataFile = current+"/../../uploads/" + args[1];
         String title = args[2];
         String description = args[3];
         int numAssignments = Integer.parseInt(args[4]);//num of assignment per question/hit
@@ -431,17 +495,29 @@ public class MTurkCrowdSourcing {
         String goldCol = args[14];
         ArrayList<String> sqNums = getList(args[15]);
         ArrayList<String> gqNums = getList(args[16]);
-        String crowdHistoryFile = "./history/" + args[17];
+        String crowdHistoryFile = current+"/results/" + args[17];
+                
+        boolean ifPayRejected = Boolean.parseBoolean(args[19]);//approve, not count towards the statistics
+        boolean ifBlockRejected = Boolean.parseBoolean(args[20]);//if block rejected person
+        int blockMin = Integer.parseInt(args[21]);;//block a rejected worker if he have given blockMin or more answers
         
         
         
-        
-        /*******start of command line argument**************************************/
-        /*******start of command line argument**************************************/
-        /*******start of command line argument**************************************/
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
         /*
-        String qFile = "../uploads/face10.question";
-        String dataFile = "../uploads/face10.details";
+        String username = "yao";
+        
+        String current = new java.io.File( "." ).getPath();
+        System.setProperty("user.dir", current+"/../users/"+username);
+        current = new java.io.File( "." ).getCanonicalPath();
+        
+        File dir = new File(current+"/tmp");
+        dir.mkdir();
+
+        String qFile = current+"/../../uploads/face10.question";
+        String dataFile = current+"/../../uploads/face10.details";
         String title = "face orientation detection";
         String description = "determine the orientation of the face";
         int numAssignments = 1;//num of assignment per question/hit
@@ -455,13 +531,20 @@ public class MTurkCrowdSourcing {
         long checkInterval = 5 * 1000;//5 seconds
         String idCol = "PrimaryKey";//id/primaryKey
         String goldCol = "orientation";
-        ArrayList<String> sqNums = getList("2,3,4,5,6");
+        ArrayList<String> sqNums = getList("2,3,4,6");
         ArrayList<String> gqNums = getList("3,6");
-        String crowdHistoryFile = "./history/csHistory";
+        String crowdHistoryFile = current+"/results/" + "myHistory";
+                
+        boolean ifPayRejected = true;//approve, not count towards the statistics
+        boolean ifBlockRejected = true;//if block rejected person
+        int blockMin = 2;//block a rejected worker if he have given blockMin or more answers
+        
+        
+
         */
-        /*******end of command line argument***************************************/
-        /*******end of command line argument***************************************/
-        /*******end of command line argument***************************************/
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////
         
         Map<String, String> choices = new HashMap<String, String>();
         
@@ -469,8 +552,9 @@ public class MTurkCrowdSourcing {
         FileWriter writer=new FileWriter(crowdHistoryFile);
         writer.close();
         
+        String fileContent = FileUtils.readFileToString(new File(qFile));
         
-        String fileContent = new String(Files.readAllBytes(Paths.get(qFile)));
+        
         int start = fileContent.indexOf("<Selections>");
         int end = fileContent.indexOf("</Selections>");
         String questionField = fileContent.substring(start, end);
@@ -528,7 +612,8 @@ public class MTurkCrowdSourcing {
             rewardPerHitInDollars, fractionToFail, 
             allQuestions, assignmentDurationInSeconds,
             autoApprovalDelayInSeconds, lifetimeInSeconds,
-            keywords, choices, checkInterval, qFile,crowdHistoryFile, minGoldAnswer);
+            keywords, choices, checkInterval, qFile,crowdHistoryFile, minGoldAnswer,
+            ifPayRejected,ifBlockRejected,blockMin);
         
         cs.run();
         
