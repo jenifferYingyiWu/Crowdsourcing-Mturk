@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<QuestionForm xmlns="http://mechanicalturk.amazonaws.com/AWSMechanicalTurkDataSchemas/2005-10-01/QuestionForm.xsd">
+	<Question>
+		<QuestionIdentifier>1</QuestionIdentifier>
+		<IsRequired>true</IsRequired>
+		<QuestionContent>
+			<Text>Determine the sentiment of the following tweet: (0 for negative and 1 for positive)</Text>
+            <Text>Q${ID}: ${Text}:</Text>
+            <Text>Cheat: ${Sentiment}</Text>
+		</QuestionContent>
+		<AnswerSpecification>
+			<SelectionAnswer>
+				<MinSelectionCount>1</MinSelectionCount>
+				<MaxSelectionCount>1</MaxSelectionCount>
+				<Selections>
+					<Selection>
+						<SelectionIdentifier>0</SelectionIdentifier>
+						<Text>0</Text>
+					</Selection>
+					<Selection>
+						<SelectionIdentifier>1</SelectionIdentifier>
+						<Text>1</Text>
+					</Selection>
+				</Selections>
+			</SelectionAnswer>
+		</AnswerSpecification>
+	</Question>
+</QuestionForm>
+

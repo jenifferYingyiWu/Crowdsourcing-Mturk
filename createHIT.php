@@ -50,7 +50,9 @@ a:visited { color: blue; }
 	session_start();
 	$username = $_SESSION['username'];
 
-	exec("cd MTurkCrowdSourcing; java -cp \"external_jars/*:.\" mturkcrowdsourcing.MTurkCrowdSourcing"
+	exec("cd MTurkCrowdSourcing; 
+		java -cp \"external_jars/*:.\" mturkcrowdsourcing.MTurkCrowdSourcing"
+		. " " . $username
 		. " " .	$_POST["questionFile"] 
 		. " " . $_POST["dataFile"] 
 		. " " . "\"" . $_POST["title"] . "\""
@@ -69,7 +71,14 @@ a:visited { color: blue; }
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
 		. " " . $_POST["resultsFile"] 
-		. " " . $username
+		. " " . $_POST["payIfRejected"]
+		. " " . $_POST["rejectType"] /* accuracy or numMistakes */
+		. " " . $_POST["blockType"] /* accuracy or numMistakes */
+		. " " . $_POST["accuracy_reject"]  
+		. " " . $_POST["numMistakes_reject"] 
+		. " " . $_POST["accuracy_block"] 
+		. " " . $_POST["numMistakes_block"] 
+		. " " . $_POST["usingGold"] 
 		. "> /dev/null 2>/dev/null &");
 	// string added to end to make php process execute asynchronously in background
 

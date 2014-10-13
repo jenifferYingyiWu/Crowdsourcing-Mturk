@@ -618,8 +618,4 @@ public class MTurkCrowdSourcing {
         cs.run();
         
     }
-    
-    
-    
-    
 }

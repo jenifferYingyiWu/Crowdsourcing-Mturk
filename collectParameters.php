@@ -49,60 +49,103 @@ echo "Size: " . round($_FILES["questionFile"]["size"] / 1024,4) . " Kb<br>";
 */
 ?>
 
-<h3>Specify Task Parameters</h3>
+<h2>Specify Task Parameters</h2>
 
 <form action="createHIT.php" method="post" id="hit_form" class="bottom-margin">
 
-<table border="0" id="topTable">
-<tr><td>Title:</td> 
-	<td><input class="text" type="text" name="title"></td></tr>
-<tr><td>Description:</td> 
-	<td><input class="text" type="text" name="description"></td></tr>
-<tr><td>Keywords:</td> 
-	<td><input class="text" type="text" name="keywords"></td></tr>
-<tr><td>Number of Assignments:</td> 
-	<td><input class="numeric" type="text" name="numAssignments"></td></tr>
-<tr><td>Reward ($):</td> 
-	<td><input class="numeric" type="text" name="reward"></td></tr>
-<tr><td>Duration (seconds):</td> 
-	<td><input class="numeric" type="text" name="duration"></td></tr>
-<tr><td>Auto Approval Delay (seconds):</td> 
-	<td><input class="numeric" type="text" name="autoApprovalDelay"></td></tr>
-<tr><td>Lifetime (seconds):</td>
-	<td><input class="numeric" type="text" name="lifetime"></td></tr>
-<tr><td>Check Interval (milliseconds):</td>
-	<td><input class="numeric" type="text" name="checkInterval"></td></tr>
-<tr><td>Name of column with primary keys:</td>
-	<td><input type="text" name="idCol"></td></tr>
-<tr><td>Name of file to store results:</td>
-	<td><input type="text" name="resultsFile"></td></tr>
-</table>
-<div class="bottom-margin"></div>
+<b>Title</b><br>
+A short description of what this task entails.<br> 
+The title appears in the search results and everywhere the task is mentioned.<br>
+<input class="text" type="text" name="title"><br><br>
+<b>Description</b><br>
+A general description giving detailed information about what this task entails.<br>
+The description appears in the expanded view of search results, and task assignment screen.<br>
+<input class="text" type="text" name="description"><br><br>
+<b>Keywords</b><br>
+One or more words or phrases that describe the task.<br>
+Must be separated by commas.<br>
+<input class="text" type="text" name="keywords"><br><br>
+<b>Number of Assignments</b><br>
+Number of labels collected for each selected record.<br>
+Must be an odd number.<br>
+<input class="numeric" type="text" name="numAssignments"><br><br>
+<b>Reward</b><br>
+Amount of money (in $) paid to a worker for labeling one record.<br>
+Minimum value of 0.01. Value must be in increments of 0.01.<br>
+<input class="numeric" type="text" name="reward"><br><br>
+<b>Duration</b><br>
+Amount of time (in seconds) a worker has to complete the task after accepting it.<br>
+<input class="numeric" type="text" name="duration"><br><br>
+<b>Auto Approval Delay</b><br>
+Amount of time (in seconds) after submitting the task that it will be automatically approved.<br>
+<input class="numeric" type="text" name="autoApprovalDelay"><br><br>
+<b>Lifetime</b><br>
+Amount of time (in seconds) after which the task is no longer available for workers to accept.<br>
+<input class="numeric" type="text" name="lifetime"><br><br>
+<b>Check Interval</b><br>
+How frequently (in milliseconds) the interface should request the current results of the crowdsourcing.<br>
+Recommended: 5000ms (5s).<br>
+<input class="numeric" type="text" name="checkInterval"><br><br>
+<b>Unique Column</b><br>
+The name of a column containing values which uniquely identify each record.<br>
+<input class="singleName" type="text" name="idCol"><br><br>
+<b>Project Name</b><br>
+A name for you to reference the results of this crowdsourcing project in the future.<br>
+<input class="singleName" type="text" name="resultsFile"><br><br>
 
-<b>To verify a worker has submitted data of a high enough quality:</b><br>
-<input type="radio" name="usingGold" value="false" checked>Use all selected records 
-with the crowd's majority vote as labels.<br>
-<input type="radio" name="usingGold" value="true" id="lastUsingGold">Use a subset 
-of the selected records as gold data. Gold labels must available.<br>
+<hr>
+
+<p>To make sure we are only collecting data from and paying workers who submit
+data of a high enough quality:</p>
 
 <table border="0" id="middleTable">
-<tr><td>Reject worker if accuracy on above selected data is less than:</td>
-	<td><input class="numeric" type="text" name="fractionToFail"></td></tr>
-<tr class="usingGoldRow"><td>Reject worker if number of gold questions answered is less than:</td>
-	<td><input class="numeric" type="text" name="minGoldAnswered"></td></tr>
-<tr class="usingGoldRow"><td>Name of column with gold labels:</td>
-	<td><input type="text" name="goldCol"></td></tr>
+<tr>
+	<td>Reject a worker if:</td>
+	<td>
+		<input name="rejectType" type="radio" value="accuracy" checked>Accuracy &lt;
+		<input class="numeric" type="text" name="accuracy_reject"> %<br>
+		<input name="rejectType" type="radio" value="numMistakes"># of Mistakes &gt;
+		<input class="numeric" type="text" name="numMistakes_reject"><br>
+	</td>
+	<td class="usingAccuracyReject">Accuracy calculated after at least 
+	<input class="numeric" name="questionsForAccuracy_reject"> questions.</td>
+</tr>
+<tr>
+	<td>Block a worker if:</td>
+	<td>
+		<input name="blockType" type="radio" value="accuracy" checked>Accuracy &lt;
+		<input class="numeric" type="text" name="accuracy_block"> %<br>
+		<input name="blockType" type="radio" value="numMistakes"># of Mistakes &gt;
+		<input class="numeric" type="text" name="numMistakes_block"><br>
+	</td>
+	<td class="usingAccuracyBlock">Accuracy calculated after at least 
+	<input class="numeric" name="questionsForAccuracy_block"> questions.</td>
+</tr>
 </table>
-<div class="bottom-margin"></div>
 
-Number of records selected: <span id="numSelected">0</span><br>
+<p>Workers' labels should be checked against:</p>
+<input type="radio" name="usingGold" value="false" checked>
+The most frequent labels from other workers.<br>
+<input type="radio" name="usingGold" value="true" id="lastUsingGold">
+Gold labels, provided by you.<br>
+
+<p class="usingGoldRow">Reject worker if number of gold questions answered is less than
+	<input class="usingGoldRow numeric" type="text" name="minGoldAnswered">
+</p>
+<p class="usingGoldRow">Name of column with gold labels:
+	<input class="usingGoldRow singleName" type="text" name="goldCol">
+</p>
+
+<hr>
+
+<p>Number of records selected: <span id="numSelected">0</span></p>
 <div class="usingGold">
 Number of records used as gold data: <span id="numGold">0</span><br>
 </div>
-<input id="selectAll" type="button" value="Select all">
-<input id="deselectAll" type="button" value="Deselect all"><br>
-Clicking a table row cycles through 
-<span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span><br>
+<p><input id="selectAll" type="button" value="Select all">
+<input id="deselectAll" type="button" value="Deselect all"></p>
+<p> Clicking a table row cycles through 
+<span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span></p>
 
 <?php
 // read the data set row by row,
@@ -127,16 +170,20 @@ for ($i = 0; $i < $numCols; $i++)
 	echo "<th align=\"left\">" . $columnNames[$i] . "</th>";
 echo "</tr></thead><tbody>";
 
-$imageCols = explode(",", $_POST['imageCols']);
-
+$valid_image_types = array('jpg', 'gif', 'png');
 $numRecords = 0;
 while ($line = fgetcsv($handle)) {
 	$line = array_map('trim', $line);
 	echo "<tr class='unselected'>";
 	for ($i = 0; $i < $numCols; $i++) {
 		echo "<td>";
-		if (in_array($columnNames[$i], $imageCols))
-			echo "<image src=\"" . $line[$i] . "\" style=\"max-height: 40px\">";	
+		if (filter_var($line[$i], FILTER_VALIDATE_URL)) {
+			$path_parts = pathinfo($line[$i]);
+			if (in_array($path_parts['extension'], $valid_image_types))
+				echo "<image src=\"" . $line[$i] . "\" style=\"max-height: 40px\">";	
+			else
+				echo $line[$i];	
+		}
 		else 
 			echo $line[$i];	
 		echo "</td>";

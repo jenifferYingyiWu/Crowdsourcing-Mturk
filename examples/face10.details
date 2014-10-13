@@ -1,0 +1,11 @@
+PrimaryKey, image, user, orientation, eye, expression, publishedURL
+1, karyadi_left_sad_sunglasses_4.jpg, karyadi, left, sunglasses, sad, https://umich.box.com/shared/static/ifqfz8bd1r00lswhp910.jpg
+2, karyadi_left_angry_sunglasses_4.jpg, karyadi, left, sunglasses, angry, https://umich.box.com/shared/static/x90gc7532a91xznknx2d.jpg
+3, karyadi_left_neutral_sunglasses_4.jpg, karyadi, left, sunglasses, neutral, https://umich.box.com/shared/static/51pa2fwjd5nlwkjnlph8.jpg
+4, karyadi_left_happy_sunglasses_4.jpg, karyadi, left, sunglasses, happy, https://umich.box.com/shared/static/328lt9rpq89egtaje6g1.jpg
+5, boland_straight_happy_sunglasses_4.jpg, boland, straight, sunglasses, happy, https://umich.box.com/shared/static/hsaf50itb6muuhina70e.jpg 
+6, boland_straight_angry_sunglasses_4.jpg, boland, straight, sunglasses, angry, https://umich.box.com/shared/static/lym6m1oi4g1gbutlnsoh.jpg
+7, boland_straight_neutral_sunglasses_4.jpg, boland, straight, sunglasses, neutral, https://umich.box.com/shared/static/ss3cjym7eznsd6hg61yo.jpg
+8, boland_straight_sad_sunglasses_4.jpg, boland, straight, sunglasses, sad, https://umich.box.com/shared/static/u76r1m88gigbylweekg8.jpg
+9, steffi_up_happy_sunglasses_4.jpg, steffi, up, sunglasses, sad, https://umich.box.com/shared/static/4erngrlwvkw92gtldgpp.jpg
+10, steffi_up_neutral_sunglasses_4.jpg, steffi, up, sunglasses, neutral, https://umich.box.com/shared/static/iwqn207jz8jde75xdc95.jpg

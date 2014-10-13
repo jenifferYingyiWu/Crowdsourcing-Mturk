@@ -11,32 +11,34 @@
 <form action="collectParameters.php" method="POST" enctype="multipart/form-data">
 <h3>Specify Data File</h3>
 <ul>
-<li>The file is in <a target="_blank" href="http://tools.ietf.org/html/rfc4180">CSV format</a>.</li>
-<li>The first line contains the names of the columns.</li>
-<li>Image links are valid HTTP URLs.</li>
+<li>The file must be in CSV format.</li>
+<li>The first line must contain the names of the columns.</li>
+<li>One column must contain values which uniquely identify each record.</li>
+<li>If image links are provided, they must be valid HTTP URLs.</li>
+<li>If text may contain commas, it must be encapsulated with double quotes.</li>
 </ul>
+<p>Examples: <a href="examples/face10.details" target="_blank">Faces</a>, 
+	<a href="examples/tweets50.details" target="_blank">Tweets</a></p>
 <input type="file" name="dataFile"><br>
-<label>For thumbnails, provide a comma separated list of the names of columns with image links:</label>
-<input type="text" name="imageCols">
 
 <h3>Specify Question Format File</h3>
 <ul>
 <li>The file is in <a target="_blank" href="http://docs.aws.amazon.com/AWSMechTurk/latest/AWSMturkAPI/ApiReference_QuestionFormDataStructureArticle.html">QuestionForm format</a>.</li>
-<li>If ${columnName} is found within a field, it will be replaced by the contents of
-	the specified column in the actual HIT.</li>
-<li>The <i>AnswerSpecification</i> field contains the
-	<i>SelectionAnswer</i> field.</li>
+<li>Place ${columnName} within a field anywhere you would like it to be replaced
+	by the contents of columnName in the actual task.</li>
+<li>The <i>AnswerSpecification</i> field must contain the <i>SelectionAnswer</i> field.</li>
 <li>For the <i>Selection</i> fields within the <i>SelectionAnswer</i> 
 	field:</li>
 	<ul>
-		<li>The <i>Text</i> fields contain the actual values for the labels.</li>
+		<li>The <i>Text</i> fields must contain the actual values for the labels.</li>
 		<li>The <i>SelectionIdentifier</i> fields contain unique abbreviations
 		representing these actual values.</li>
-		<li><i>MinSelectionCount</i> and <i>MaxSelectionCount</i> have a value of 1.</li>
+		<li><i>MinSelectionCount</i> and <i>MaxSelectionCount</i> must have a value of 1.</li>
 	</ul>
 </ul>
+<p>Examples: <a href="examples/face10.question" target="_blank">Faces</a>, 
+	<a href="examples/tweets50.question" target="_blank">Tweets</a></p>
 <input type="file" name="questionFile"><br><br>
-
 <input type="submit" value="Upload">
 </form>
 </body>

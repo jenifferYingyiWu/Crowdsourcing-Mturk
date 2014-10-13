@@ -5,7 +5,9 @@
 
 .bottom-margin { margin-bottom: 0.5cm; }
 
-input.text { width: 300px; }
+
+input.text { width: 600px; }
+input.singleName { width: 200px; }
 input.numeric { width: 40px; }
 
 #topTable, #middleTable { border-collapse: collapse; }

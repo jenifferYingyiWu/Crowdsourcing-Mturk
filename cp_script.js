@@ -80,6 +80,28 @@ $(document).ready(function() {
 		$("input[name='minGoldAnswered']").val('-1'); 
 	}
 
+	$("input[name='rejectType']").change(function() {
+		if ($("input[name='rejectType']:checked").val() == 'accuracy') {
+			$(".usingAccuracyReject").show();
+			$("input[name='goldCol']").val(''); 
+		}
+		else { // val == 'mistakes'
+			$(".usingAccuracyReject").hide();
+			$("input[name='goldCol']").val('-1'); 
+		}
+	});
+
+	$("input[name='blockType']").change(function() {
+		if ($("input[name='blockType']:checked").val() == 'accuracy') {
+			$(".usingAccuracyBlock").show();
+			$("input[name='goldCol']").val(''); 
+		}
+		else { // val == 'mistakes'
+			$(".usingAccuracyBlock").hide();
+			$("input[name='goldCol']").val('-1'); 
+		}
+	});
+
 	$("input[name='usingGold']").change(function() {
 		if ($("input[name='usingGold']:checked").val() == 'true') {
 			$(".usingGold").css('display', 'block');
