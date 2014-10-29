@@ -9,6 +9,7 @@
 </head>
 <body>
 <?php
+session_start();
 // if there was an error opening the files
 if ($_FILES["dataFile"]["error"] > 0) {
 	echo "Error: " . $_FILES["dataFile"]["error"] . "<br>";
@@ -147,6 +148,11 @@ Number of records used as gold data: <span id="numGold">0</span><br>
 <p> Clicking a table row cycles through 
 <span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span></p>
 
+Get all records where column <input type="text" id="colToSearch" class="singleName">
+has value <input type="text" id="valToSearch" class="singleName">
+<input id="getRecords" type="button" value="Get Records"><br>
+<input id="resetRecords" type="button" value="Reset Records"><br><br>
+
 <?php
 // read the data set row by row,
 // where each row takes the form: ID,sentiment,text
@@ -197,6 +203,7 @@ fclose($handle);
 
 <input type="hidden" name="dataFile" value="<?php echo $_FILES["dataFile"]["name"]; ?>">
 <input type="hidden" name="questionFile" value="<?php echo $_FILES["questionFile"]["name"]; ?>">
+<input type="hidden" name="username" value="<?php echo $_SESSION['username']; ?>">
 
 <!-- values changed in js file upon submit -->
 <input type="hidden" name="keys_of_selected"> 
@@ -206,8 +213,9 @@ fclose($handle);
 </form>
 
 <script type="text/javascript">
-// transfer php variables to javascript so they can be used in chooseTweet.js
+// transfer php variables to javascript so they can be used in cp_script.js
 var numRecords = <?php echo json_encode($numRecords); ?>; // total number of records
+var columnNames = <?php echo json_encode($columnNames); ?>;
 </script>
 
 </body>

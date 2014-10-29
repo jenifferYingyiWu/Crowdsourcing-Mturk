@@ -2,7 +2,7 @@ $(document).ready(function() {
 	var keys_of_selected = [];
 	var numSelected = 0;
 	var keys_of_gold = [];
-	var numGold = 0;
+	var numGold = 0;	
 		
 	// select/deselect a single row
 	$('#data tbody').on('click', 'tr', function() {
@@ -47,8 +47,8 @@ $(document).ready(function() {
 		$("#numGold").html(numGold);	
 	});
 
-	// deselect all rows
-	$('#deselectAll').click(function() {
+	function deselectRows() 
+	{
 		$('.selected').removeClass('selected');
 		$('.gold').removeClass('gold');
 		$('#data tbody tr').addClass('unselected');
@@ -58,18 +58,24 @@ $(document).ready(function() {
 		numGold = 0;
 		$("#numSelected").html(numSelected);	
 		$("#numGold").html(numGold);	
-	});
+	}
+
+	// deselect all rows
+	$('#deselectAll').click(deselectRows);
 
 	// select all rows
 	$('#selectAll').click(function() {
 		$('.unselected').addClass('selected');
 		$('.unselected').removeClass('unselected');
 		keys_of_selected = [];
-		for (var i = 1; i <= numRecords; i++)
-			keys_of_selected.push(i);
-		numSelected = numRecords;
+		var i = 1;
+		$('#data > tbody > tr').each(function() {
+			if ($(this).css('display') != 'none')
+				keys_of_selected.push(i);
+			i++;
+		});
+		numSelected = keys_of_selected.length;
 		$("#numSelected").html(numSelected);	
-		$("#numGold").html(numGold);	
 	});
 
 	// on page load
@@ -127,6 +133,49 @@ $(document).ready(function() {
 			numGold = 0;
 			$("#numGold").html(numGold);	
 		}
+	});
+
+	$('#getRecords').click(function() {
+		var colToSearch = $('#colToSearch').val();
+		var valToSearch = $('#valToSearch').val();
+		if (columnNames.indexOf(colToSearch) == -1) {
+			alert('Invalid Column Name: ' + colToSearch);
+			$('#colToSearch').val('');
+			return;
+		}
+
+		$('#data > tbody > tr').each(function() {
+			var i = 0;
+			var that = $(this);
+			$(this).find('td').each(function() {
+				if (columnNames[i] == colToSearch) {
+					if (that.css('display') != 'none') { // ignore hidden rows
+						// hide rows where the value in colToSearch is not valToSearch
+						if ($(this).html() != valToSearch) {
+							that.css('display', 'none'); // hide row
+							if (that.hasClass('selected')) {
+								numSelected--;
+								$("#numSelected").html(numSelected);	
+							}
+							if (that.hasClass('gold')) {
+								numSelected--;
+								numGold--;
+								$("#numSelected").html(numSelected);	
+								$("#numGold").html(numGold);	
+							}
+						}
+					}
+				}
+				i++;
+			});
+		});	
+		$('#colToSearch').val('');
+		$('#valToSearch').val('');
+	});
+
+	$('#resetRecords').click(function() {
+		$('#data > tbody > tr').css('display', '');	
+		deselectRows();	
 	});
 
 	// on submitting the form, set the value of the hidden input in the form

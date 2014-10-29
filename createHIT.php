@@ -6,11 +6,15 @@
 <script type="text/javascript">
 	function loadXMLDoc() {
 		var numSelected = <?php echo json_encode(count(explode(",", $_POST["keys_of_selected"]))); ?>;
+		var username = <?php echo json_encode($_POST['username']); ?>;
+		var resultsFile = <?php echo json_encode($_POST['resultsFile']); ?>;
 
 		var xmlhttp = new XMLHttpRequest();
 		// add '?t='+Math.random() to prevent caching. Makes webserver realize
 		// that we are loading a new (possibly updated) document each time.
-		xmlhttp.open('GET', 'MTurkCrowdSourcing/history/csHistory?t=' + Math.random(), true);
+		/*xmlhttp.open('GET', 'MTurkCrowdSourcing/history/csHistory?t=' + Math.random(), true);*/
+		var pathToResults = 'users/' + username + '/results/' + resultsFile;
+		xmlhttp.open('GET', pathToResults + '?t=' + Math.random(), true);
 
 		xmlhttp.onload = function() {
 			var responseText_split = (xmlhttp.responseText).split("\n");
@@ -47,19 +51,15 @@ a:visited { color: blue; }
 </head>
 <body>
 <?php
-	session_start();
-	$username = $_SESSION['username'];
-
-	exec("cd MTurkCrowdSourcing; 
+	$output = shell_exec("cd MTurkCrowdSourcing;
 		java -cp \"external_jars/*:.\" mturkcrowdsourcing.MTurkCrowdSourcing"
-		. " " . $username
+		. " " . $_POST["username"]
 		. " " .	$_POST["questionFile"] 
 		. " " . $_POST["dataFile"] 
 		. " " . "\"" . $_POST["title"] . "\""
 		. " " . "\"" . $_POST["description"] . "\""
 		. " " . $_POST["numAssignments"]
 		. " " . $_POST["reward"]
-		. " " . $_POST["fractionToFail"]
 		. " " . $_POST["minGoldAnswered"]
 		. " " . $_POST["duration"] 
 		. " " . $_POST["autoApprovalDelay"] 
@@ -71,7 +71,6 @@ a:visited { color: blue; }
 		. " " . $_POST["keys_of_selected"] 
 		. " " . $_POST["keys_of_gold"] 
 		. " " . $_POST["resultsFile"] 
-		. " " . $_POST["payIfRejected"]
 		. " " . $_POST["rejectType"] /* accuracy or numMistakes */
 		. " " . $_POST["blockType"] /* accuracy or numMistakes */
 		. " " . $_POST["accuracy_reject"]  
@@ -80,6 +79,7 @@ a:visited { color: blue; }
 		. " " . $_POST["numMistakes_block"] 
 		. " " . $_POST["usingGold"] 
 		. "> /dev/null 2>/dev/null &");
+		//echo "<pre>$output<pre>";
 	// string added to end to make php process execute asynchronously in background
 
 	/*

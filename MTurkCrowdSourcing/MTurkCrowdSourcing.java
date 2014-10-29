@@ -303,13 +303,6 @@ public class MTurkCrowdSourcing {
                 }
             }
         }
-        
-
-
-        
-        
-        
-        
         return result;
     }
     
@@ -439,7 +432,7 @@ public class MTurkCrowdSourcing {
     }
 
     static ArrayList<String> getList(String s){//seperated by commas, no space in between
-        ArrayList<String> result = new ArrayList<>();
+        ArrayList<String> result = new ArrayList<String>();
         if(s.isEmpty()){
             return result;
         }
@@ -469,7 +462,7 @@ public class MTurkCrowdSourcing {
 
         
         
-        String username = args[18];
+        String username = args[0];
         
         String current = new java.io.File( "." ).getPath();
         System.setProperty("user.dir", current+"/../users/"+username);
@@ -478,13 +471,12 @@ public class MTurkCrowdSourcing {
         File dir = new File(current+"/tmp");
         dir.mkdir();
 
-        String qFile = current+"/../../uploads/" + args[0];
-        String dataFile = current+"/../../uploads/" + args[1];
-        String title = args[2];
-        String description = args[3];
-        int numAssignments = Integer.parseInt(args[4]);//num of assignment per question/hit
-        double rewardPerHitInDollars = Double.parseDouble(args[5]);
-        double fractionToFail = Double.parseDouble(args[6]);//reject a worker if his accuracy is below "fractionToFail", apply to both majorityAnswer and goldAnswer strategy
+        String qFile = current+"/../../uploads/" + args[1];
+        String dataFile = current+"/../../uploads/" + args[2];
+        String title = args[3];
+        String description = args[4];
+        int numAssignments = Integer.parseInt(args[5]);//num of assignment per question/hit
+        double rewardPerHitInDollars = Double.parseDouble(args[6]);
         int minGoldAnswer = Integer.parseInt(args[7]);//reject a worker if he gives answers to less than "minGoldAnswer" gold questions; useless field (set to 0) if the stategy is majorityAnswer
         long assignmentDurationInSeconds  = Long.parseLong(args[8]);
         long autoApprovalDelayInSeconds = Long.parseLong(args[9]);
@@ -496,12 +488,12 @@ public class MTurkCrowdSourcing {
         ArrayList<String> sqNums = getList(args[15]);
         ArrayList<String> gqNums = getList(args[16]);
         String crowdHistoryFile = current+"/results/" + args[17];
+
+		double fractionToFail = 0.8;
                 
-        boolean ifPayRejected = Boolean.parseBoolean(args[19]);//approve, not count towards the statistics
-        boolean ifBlockRejected = Boolean.parseBoolean(args[20]);//if block rejected person
-        int blockMin = Integer.parseInt(args[21]);;//block a rejected worker if he have given blockMin or more answers
-        
-        
+        boolean ifPayRejected = Boolean.parseBoolean("False");//approve, not count towards the statistics
+        boolean ifBlockRejected = Boolean.parseBoolean("False");//if block rejected person
+        int blockMin = Integer.parseInt("10");//block a rejected worker if he have given blockMin or more answers
         
         ////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////
