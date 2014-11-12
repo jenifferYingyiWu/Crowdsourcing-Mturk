@@ -126,7 +126,7 @@ data of a high enough quality:</p>
 
 <p>Workers' labels should be checked against:</p>
 <input type="radio" name="usingGold" value="false" checked>
-The most frequent labels from other workers.<br>
+The majority votes of the labels from other workers.<br>
 <input type="radio" name="usingGold" value="true" id="lastUsingGold">
 Gold labels, provided by you.<br>
 
@@ -143,32 +143,29 @@ Gold labels, provided by you.<br>
 <div class="usingGold">
 Number of records used as gold data: <span id="numGold">0</span><br>
 </div>
-<p><input id="selectAll" type="button" value="Select all">
+<p><input id="selectAll_nongold" type="button" value="Select all">
+<input id="selectAll_gold" type="button" value="Select all as gold">
 <input id="deselectAll" type="button" value="Deselect all"></p>
+
+<select name="tableOp">
+<option value="filter">Filter</option>
+<option value="selectAsNonGold">Select as non gold</option>
+<option value="selectAsGold">Select as gold</option>
+<option value="deselect">Deselect</option>
+</select>
+records where column <input type="text" id="colToSearch" class="singleName">
+has value <input type="text" id="valToSearch" class="singleName">
+<input id="executeTableOp" type="button" value="Execute"><br>
+<input id="resetRecords" type="button" value="Reset Records"><br>
+
 <p> Clicking a table row cycles through 
 <span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span></p>
 
-Get all records where column <input type="text" id="colToSearch" class="singleName">
-has value <input type="text" id="valToSearch" class="singleName">
-<input id="getRecords" type="button" value="Get Records"><br>
-<input id="resetRecords" type="button" value="Reset Records"><br><br>
-
 <?php
-// read the data set row by row,
-// where each row takes the form: ID,sentiment,text
-// and output the dataset in a table
-$ID = array();
-$sentiment = array();
-$text = array();
-
-$numTweets = 0;
-$numPositive = 0;
-$numNegative = 0;
-
 $handle = fopen($dataFileDest, "r");
 $columnNames = fgetcsv($handle); // get first line
-$numCols = count($columnNames);
 $columnNames = array_map('trim', $columnNames);
+$numCols = count($columnNames);
 
 echo "<table id=\"data\" border=\"1\">";
 echo "<thead><tr>";
@@ -178,9 +175,10 @@ echo "</tr></thead><tbody>";
 
 $valid_image_types = array('jpg', 'gif', 'png');
 $numRecords = 0;
+
 while ($line = fgetcsv($handle)) {
 	$line = array_map('trim', $line);
-	echo "<tr class='unselected'>";
+	echo "<tr id='r" . $numRecords . "' class='unselected'>";
 	for ($i = 0; $i < $numCols; $i++) {
 		echo "<td>";
 		if (filter_var($line[$i], FILTER_VALIDATE_URL)) {
@@ -198,6 +196,7 @@ while ($line = fgetcsv($handle)) {
 	$numRecords++;
 }
 echo "</tbody></table>";
+
 fclose($handle);
 ?> 
 
