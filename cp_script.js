@@ -132,7 +132,7 @@ $(document).ready(function() {
 
 	$("input[name='usingGold']").change(function() {
 		if ($("input[name='usingGold']:checked").val() == 'true') {
-			$(".usingGold").css('display', 'block');
+			$(".usingGold").css('display', 'inline-block');
 			$(".usingGoldRow").show();
 			$("#selectAll_gold").show();
 			$("#selectAll_nongold").val('Select all as non gold');
@@ -194,7 +194,7 @@ $(document).ready(function() {
 			thisRow.removeClass('unselected');
 			keys_of_selected.push(randId);
 		}
-		
+
 		if (usingGold) {
 			// randomly choose a subset of the selected records (randIds) to be gold.
 			for (var i = 0; i < numSelectedAsGold; i++) {

@@ -7,10 +7,7 @@
 
 input.text { width: 600px; }
 input.singleName { width: 200px; }
-input.numeric { width: 40px; }
-
-#topTable, #middleTable { border-collapse: collapse; }
-#topTable td:first-child, #middleTable td:first-child { text-align: right; }
+input.numeric { width: 60px; }
 
 /* no text highlighting in table (when clicking table rows) */
 #data {
@@ -23,10 +20,20 @@ input.numeric { width: 40px; }
 	border-collapse: collapse;
 }
 
-#middleTable tbody tr td {
+#middleTable tr td {
 	padding-right: 10px;
 }
 
 #lastUsingGold {
 	margin-bottom: 10px;
+}
+
+.floatLeft {
+	float: left;
+	margin-right: 20px;
+}
+
+#colToSearch, #valToSearch, #numSelectedAsGold, #numRandSelected,
+input[name='minGoldAnswered'], input[name='goldCol'] {
+	display: inline;	
 }
