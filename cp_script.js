@@ -6,7 +6,7 @@ $(document).ready(function() {
 		
 	// select/deselect a single row
 	$('#data tbody').on('click', 'tr', function() {
-		var ID = parseInt($(this).attr('id'));
+		var ID = $(this).attr('id');
 		// unselected --> selected
 		if ($(this).hasClass('unselected')) {
 			$(this).removeClass('unselected');
@@ -40,6 +40,10 @@ $(document).ready(function() {
 		updateCounts();
 	});
 
+	// basic pattern: 
+	// change keys_of_selected and keys_of_gold 
+	// to reflect the current state of the table
+	// then call updateCounts.
 	function updateCounts() 
 	{
 		numSelected = keys_of_selected.length;
@@ -67,13 +71,13 @@ $(document).ready(function() {
 				if ($(this).hasClass('unselected')) {
 					$(this).removeClass('unselected');
 					$(this).addClass('selected');
-					var ID = parseInt($(this).attr('id'));
+					var ID = $(this).attr('id');
 					keys_of_selected.push(ID);
 				}
 				if ($(this).hasClass('gold')) {
 					$(this).removeClass('gold');
 					$(this).addClass('selected');
-					var ID = parseInt($(this).attr('id'));
+					var ID = $(this).attr('id');
 					var index = keys_of_gold.indexOf(ID);
 					keys_of_gold.splice(index, 1);
 				}
@@ -85,7 +89,7 @@ $(document).ready(function() {
 	$('#selectAll_gold').click(function() {
 		$('#data > tbody > tr').each(function() {
 			if ($(this).css('display') != 'none') {
-				var ID = parseInt($(this).attr('id'));
+				var ID = $(this).attr('id');
 				if ($(this).hasClass('unselected')) {
 					$(this).removeClass('unselected');
 					$(this).addClass('gold');
@@ -159,6 +163,52 @@ $(document).ready(function() {
 		}
 	});
 
+	$('#executeRandSelect').click(function() {
+		var numRandSelected = parseInt($('#numRandSelected').val());
+		var numSelectedAsGold = parseFloat($('#numSelectedAsGold').val());
+		var visibleIds = [];
+		var numVisible = $('#data > tbody > tr:visible').length;
+		var usingGold = ($("input[name='usingGold']:checked").val() == 'true');
+		if (numRandSelected < 0 || numRandSelected > numVisible
+			|| (usingGold && (numSelectedAsGold < 0 || numSelectedAsGold > numRandSelected))) {
+			alert("Invalid number of records to select.");
+			$('#numRandSelected').val('');
+			$('#numSelectedAsGold').val('');
+			return;
+		}
+					
+		deselectRows();
+
+		$('#data > tbody > tr:visible').each(function() {
+			var ID = $(this).attr('id');
+			visibleIds.push(ID);
+		});
+		// randomly choose a subset of visibleIds to be selected (randIds).
+		var randIds = [];
+		for (var i = 0; i < numRandSelected; i++) {
+			var randIndex = Math.floor(Math.random()*visibleIds.length);
+			var randId = visibleIds.splice(randIndex, 1);	
+			randIds.push(randId);
+			var thisRow = $('#' + randId);
+			thisRow.addClass('selected');
+			thisRow.removeClass('unselected');
+			keys_of_selected.push(randId);
+		}
+		
+		if (usingGold) {
+			// randomly choose a subset of the selected records (randIds) to be gold.
+			for (var i = 0; i < numSelectedAsGold; i++) {
+				var randIndex = Math.floor(Math.random()*randIds.length);
+				var randId = randIds.splice(randIndex, 1);
+				var thisRow = $('#' + randId);
+				thisRow.addClass('gold');
+				thisRow.removeClass('selected');
+				keys_of_gold.push(randId);
+			}
+		}
+		updateCounts();
+	});
+
 	$('#executeTableOp').click(function() {
 		var op = $('select[name="tableOp"]').val()
 		var colToSearch = $('#colToSearch').val();
@@ -178,7 +228,7 @@ $(document).ready(function() {
 					if (that.css('display') != 'none') {
 						if (op == 'filter' && $(this).html() != valToSearch) {
 							// HIDE ROW since the value in colToSearch is not valToSearch
-							var ID = parseInt(that.attr('id'));
+							var ID = that.attr('id');
 							that.css('display', 'none');
 							if (that.hasClass('selected')) {
 								that.addClass('unselected');
@@ -197,7 +247,7 @@ $(document).ready(function() {
 						}
 						else if (op == 'selectAsNonGold' && $(this).html() == valToSearch) {
 							// SELECT ROW since the value in colToSearch is valToSearch
-							var ID = parseInt(that.attr('id'));
+							var ID = that.attr('id');
 							if (that.hasClass('unselected')) {
 								that.removeClass('unselected');
 								that.addClass('selected');
@@ -212,7 +262,7 @@ $(document).ready(function() {
 						}
 						else if (op == 'selectAsGold' && $(this).html() == valToSearch) {
 							// SELECT ROWS AS GOLD since the value in colToSearch is valToSearch
-							var ID = parseInt(that.attr('id'));
+							var ID = that.attr('id');
 							if (that.hasClass('unselected')) {
 								that.removeClass('unselected');
 								that.addClass('gold');
@@ -227,7 +277,7 @@ $(document).ready(function() {
 						}
 						else if (op == 'deselect' && $(this).html() == valToSearch) {
 							// DESELECT ROWS AS GOLD since the value in colToSearch is valToSearch
-							var ID = parseInt(that.attr('id'));
+							var ID = that.attr('id');
 							if (that.hasClass('selected')) {
 								that.removeClass('selected');
 								that.addClass('unselected');

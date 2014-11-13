@@ -138,14 +138,14 @@ Gold labels, provided by you.<br>
 </p>
 
 <hr>
-
 <p>Number of records selected: <span id="numSelected">0</span></p>
 <div class="usingGold">
 Number of records used as gold data: <span id="numGold">0</span><br>
 </div>
 <p><input id="selectAll_nongold" type="button" value="Select all">
 <input id="selectAll_gold" type="button" value="Select all as gold">
-<input id="deselectAll" type="button" value="Deselect all"></p>
+<input id="deselectAll" type="button" value="Deselect all">
+<input id="resetRecords" type="button" value="Reset Records"></p>
 
 <select name="tableOp">
 <option value="filter">Filter</option>
@@ -155,8 +155,15 @@ Number of records used as gold data: <span id="numGold">0</span><br>
 </select>
 records where column <input type="text" id="colToSearch" class="singleName">
 has value <input type="text" id="valToSearch" class="singleName">
-<input id="executeTableOp" type="button" value="Execute"><br>
-<input id="resetRecords" type="button" value="Reset Records"><br>
+<input id="executeTableOp" type="button" value="Execute"><br><br>
+
+<div class="inline">Randomly select 
+<input type="text" class="numeric" id="numRandSelected"> records
+</div>
+<div class="inline usingGold"> where 
+<input type="text" class="numeric" id="numSelectedAsGold">
+selected records are treated as gold records</div>
+<input id="executeRandSelect" type="button" value="Execute"><br>
 
 <p> Clicking a table row cycles through 
 <span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span></p>

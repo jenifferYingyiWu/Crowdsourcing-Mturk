@@ -22,6 +22,9 @@
 		mkdir('users/' . $username . '/results');
 		chmod('users/' . $username . '/results', 0777);
 
+		mkdir('users/' . $username . '/params');
+		chmod('users/' . $username . '/params', 0777);
+
 		$randText = md5(uniqid(rand(), true));
 		$salt = substr($randText, 0, 3);
 		$encryptedPassword = hash('sha256', $salt . $password);

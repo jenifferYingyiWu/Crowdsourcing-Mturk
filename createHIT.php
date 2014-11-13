@@ -51,62 +51,40 @@ a:visited { color: blue; }
 </head>
 <body>
 <?php
-	$output = shell_exec("cd MTurkCrowdSourcing;
-		java -cp \"external_jars/*:.\" mturkcrowdsourcing.MTurkCrowdSourcing"
-		. " " . $_POST["username"]
-		. " " .	$_POST["questionFile"] 
-		. " " . $_POST["dataFile"] 
-		. " " . "\"" . $_POST["title"] . "\""
-		. " " . "\"" . $_POST["description"] . "\""
-		. " " . $_POST["numAssignments"]
-		. " " . $_POST["reward"]
-		. " " . $_POST["minGoldAnswered"]
-		. " " . $_POST["duration"] 
-		. " " . $_POST["autoApprovalDelay"] 
-		. " " . $_POST["lifetime"] 
-		. " " . "\"" . $_POST["keywords"] . "\""
-		. " " . $_POST["checkInterval"] 
-		. " " . $_POST["idCol"] 
-		. " " . $_POST["goldCol"] 
-		. " " . $_POST["keys_of_selected"] 
-		. " " . $_POST["keys_of_gold"] 
-		. " " . $_POST["resultsFile"] 
-		. " " . $_POST["rejectType"] /* accuracy or numMistakes */
-		. " " . $_POST["blockType"] /* accuracy or numMistakes */
-		. " " . $_POST["accuracy_reject"]  
-		. " " . $_POST["numMistakes_reject"] 
-		. " " . $_POST["accuracy_block"] 
-		. " " . $_POST["numMistakes_block"] 
-		. " " . $_POST["usingGold"] 
-		. "> /dev/null 2>/dev/null &");
+	$json = array(
+		'username' => $_POST["username"],
+		'questionFile' => $_POST["questionFile"],
+		'title' => $_POST["title"],
+		'description' => $_POST["description"],
+		'numAssignments' => $_POST["numAssignments"],
+		'reward' => $_POST["reward"],
+		'minGoldAnswered' => $_POST["minGoldAnswered"],
+		'duration' => $_POST["duration"],
+		'autoApprovalDelay' => $_POST["autoApprovalDelay"],
+		'lifetime' => $_POST["lifetime"],
+		'keywords' => $_POST["keywords"],
+		'checkInterval' => $_POST["checkInterval"],
+		'idCol' => $_POST["idCol"],
+		'goldCol' => $_POST["goldCol"],
+		'keys_of_selected' => $_POST["keys_of_selected"],
+		'keys_of_gold' => $_POST["keys_of_gold"],
+		'resultsFile' => $_POST["resultsFile"],
+		'rejectType' => $_POST["rejectType"], /* accuracy or numMistakes */
+		'blockType' => $_POST["blockType"], /* accuracy or numMistakes */
+		'accuracy_reject' => $_POST["accuracy_reject"], 
+		'numMistakes_reject' => $_POST["numMistakes_reject"], 		
+		'accuracy_block' => $_POST["accuracy_block"], 
+		'numMistakes_block' => $_POST["numMistakes_block"],
+		'usingGold' => $_POST["usingGold"]
+	);
+	file_put_contents('users/' . $_POST["username"] . '/params/' 
+		. $_POST["resultsFile"] . '.params', json_encode($json, JSON_PRETTY_PRINT));
+
+	//$output = shell_exec("cd MTurkCrowdSourcing;
+	//	java -cp \"external_jars/*:.\" mturkcrowdsourcing.MTurkCrowdSourcing
+	//  . "> /dev/null 2>/dev/null &");
 		//echo "<pre>$output<pre>";
 	// string added to end to make php process execute asynchronously in background
-
-	/*
-	// TESTING GetParams.java
-	// java [<option> ...] <class-name> [<argument> ...]
-	$output = shell_exec("java GetParams"
-		. " " .	$_POST["questionFile"] 
-		. " " . $_POST["dataFile"] 
-		. " " . "\"" . $_POST["title"] . "\""
-		. " " . "\"" . $_POST["description"] . "\""
-		. " " . $_POST["numAssignments"]
-		. " " . $_POST["reward"]
-		. " " . $_POST["fractionToFail"]
-		. " " . $_POST["minGoldAnswered"]
-		. " " . $_POST["duration"] 
-		. " " . $_POST["autoApprovalDelay"] 
-		. " " . $_POST["lifetime"] 
-		. " " . "\"" . $_POST["keywords"] . "\""
-		. " " . $_POST["checkInterval"] 
-		. " " . $_POST["idCol"] 
-		. " " . $_POST["goldCol"] 
-		. " " . $_POST["keys_of_selected"] 
-		. " " . $_POST["keys_of_gold"] 
-		. " " . $_POST["crowdHistoryFile"] 
-		. " 2>&1");
-		echo "<pre>$output<pre>";
-	*/
 ?>
 <input type="button" value="See Results So Far" onclick="loadXMLDoc()">
 <div id="results"></div><br>

@@ -4,7 +4,7 @@ by typing this in your mysql command prompt:
 CREATE USER 'cs_mturk'@'localhost' IDENTIFIED BY 'umdb2014'
 GRANT ALL PRIVILEGES ON * . * TO 'cs_mturk'@'localhost'
 
-Run create_database.php to create the cs_mturk database and members table.
+Run create_database.sql to create the cs_mturk database and members table.
 
 Start webserver (e.g. xampp) and open webpage to localhost/mturk/login.html
 
