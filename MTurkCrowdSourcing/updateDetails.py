@@ -1,3 +1,6 @@
+# to run this code:
+# import updateDetails
+# updateDetails.updateDetails("face10.details", "PrimaryKey", "PublishedURL", "orientation", "face10.question")
 import csv
 import os
 import xml.etree.ElementTree as ET
