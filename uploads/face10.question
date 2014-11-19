@@ -24,19 +24,19 @@
 				<MaxSelectionCount>1</MaxSelectionCount>
 				<Selections>
 					<Selection>
-						<SelectionIdentifier>L</SelectionIdentifier>
+						<SelectionIdentifier>1</SelectionIdentifier>
 						<Text>left</Text>
 					</Selection>
 					<Selection>
-						<SelectionIdentifier>R</SelectionIdentifier>
+						<SelectionIdentifier>3</SelectionIdentifier>
 						<Text>right</Text>
 					</Selection>
 					<Selection>
-						<SelectionIdentifier>U</SelectionIdentifier>
+						<SelectionIdentifier>0</SelectionIdentifier>
 						<Text>up</Text>
 					</Selection>
                     <Selection>
-						<SelectionIdentifier>S</SelectionIdentifier>
+						<SelectionIdentifier>2</SelectionIdentifier>
 						<Text>straight</Text>
 					</Selection>
 				</Selections>

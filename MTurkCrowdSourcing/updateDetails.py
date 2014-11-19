@@ -1,17 +1,18 @@
-# to run this code:
-# import updateDetails
-# updateDetails.updateDetails("face10.details", "PrimaryKey", "PublishedURL", "orientation", "face10.question")
 import csv
 import os
-import xml.etree.ElementTree as ET
+from xml.dom import minidom
+
+# import updateDetails
+# updateDetails.updateDetails("face10.details", "PrimaryKey", "PublishedURL", "orientation", "face10.question")
 
 def updateDetails(dataFile, primaryCol_name, urlCol_name, labelCol_name, questionFile):
-    tree = ET.parse("../uploads/" + questionFile)
-    root = tree.getroot()
-    for elem in root.findall(".//Selection"): 
-        identifier = elem.find("SelectionIdentifier").text
-        text = elem.find("Text").text
-        print identifier, text
+    text_to_selid = {}
+    doc = minidom.parse("../uploads/" + questionFile)
+    selections = doc.getElementsByTagName("Selection")
+    for selection in selections:
+        identifier = selection.getElementsByTagName("SelectionIdentifier")[0]
+        text = selection.getElementsByTagName("Text")[0]
+        text_to_selid[text.firstChild.data] = identifier.firstChild.data
 
     with open("../uploads/" + dataFile, 'rb') as readFile_obj:
         # rename details file
@@ -39,5 +40,7 @@ def updateDetails(dataFile, primaryCol_name, urlCol_name, labelCol_name, questio
                 else:
                     # parse every other line
                     # write data to updated details file
-                    writer.writerow([row[primaryCol_index], row[urlCol_index], row[labelCol_index]])
+                    text = row[labelCol_index]
+                    selid = text_to_selid[text]
+                    writer.writerow([row[primaryCol_index], row[urlCol_index], selid])
 
