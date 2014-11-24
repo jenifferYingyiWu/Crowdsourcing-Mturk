@@ -51,6 +51,20 @@ a:visited { color: blue; }
 </head>
 <body>
 <?php
+	
+	// After successfully moving the files, update the details file
+	$output = shell_exec('python updateDetails.py'
+		. ' ' . $_POST['username'] 
+		. ' ' . $_POST['dataFile'] 
+		. ' ' . $_POST["idCol"]
+		. ' ' . $_POST["urlCol"]
+		. ' ' . $_POST["goldCol"]
+		. ' ' . $_POST["usingGold"]
+		. ' ' . $_POST["questionFile"]
+	);
+	echo "<pre>" . $output . "<pre>";
+	# updateDetails("sam", "face10.details", "PrimaryKey", "publishedURL", "orientation", "face10.question")
+
 	$json = array(
 		'username' => $_POST["username"],
 		'questionFile' => $_POST["questionFile"],

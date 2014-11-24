@@ -8,5 +8,3 @@ CREATE TABLE members (
 	salt CHAR(128) NOT NULL,
 	encryptedPassword CHAR(128) NOT NULL
 ); 
-
-

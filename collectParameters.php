@@ -22,7 +22,7 @@ if ($_FILES["questionFile"]["error"] > 0) {
 }
 
 // move the file to its permanent location
-$upload_dir = "/opt/lampp/htdocs/mturk/uploads/";
+$upload_dir = "/opt/lampp/htdocs/mturk/users/" . $_SESSION['username'] . "/files/";
 $dataFileDest = $upload_dir . $_FILES["dataFile"]["name"];
 $questionFileDest = $upload_dir . $_FILES["questionFile"]["name"];
 
@@ -49,6 +49,7 @@ echo "<b>Question File</b><br>";
 echo "Location: " . $questionFileDest . "<br>";
 echo "Size: " . round($_FILES["questionFile"]["size"] / 1024,4) . " Kb<br>";
 */
+
 ?>
 
 <h2>Specify Task Parameters</h2>
@@ -232,8 +233,11 @@ while ($line = fgetcsv($handle)) {
 		echo "<td>";
 		if (filter_var($line[$i], FILTER_VALIDATE_URL)) {
 			$path_parts = pathinfo($line[$i]);
-			if (in_array($path_parts['extension'], $valid_image_types))
+			if (in_array($path_parts['extension'], $valid_image_types)) {
 				echo "<image src=\"" . $line[$i] . "\" style=\"max-height: 40px\">";	
+				// need to change eventually to allow for multiple url cols
+				$urlCol = $columnNames[$i]; 
+			}
 			else
 				echo $line[$i];	
 		}
@@ -252,6 +256,7 @@ fclose($handle);
 <input type="hidden" name="dataFile" value="<?php echo $_FILES["dataFile"]["name"]; ?>">
 <input type="hidden" name="questionFile" value="<?php echo $_FILES["questionFile"]["name"]; ?>">
 <input type="hidden" name="username" value="<?php echo $_SESSION['username']; ?>">
+<input type="hidden" name="urlCol" value="<?php echo $urlCol ?>">
 
 <!-- values changed in js file upon submit -->
 <input type="hidden" name="keys_of_selected"> 

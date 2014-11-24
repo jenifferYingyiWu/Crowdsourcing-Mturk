@@ -1,24 +1,24 @@
+#!/usr/bin/env python
 import csv
 import os
+import sys
 from xml.dom import minidom
 
-# import updateDetails
-# updateDetails.updateDetails("face10.details", "PrimaryKey", "PublishedURL", "orientation", "face10.question")
-
-def updateDetails(dataFile, primaryCol_name, urlCol_name, labelCol_name, questionFile):
+def updateDetails(username, dataFile, primaryCol_name, urlCol_name, labelCol_name, haveLabels, questionFile):
     text_to_selid = {}
-    doc = minidom.parse("../uploads/" + questionFile)
+    pathToFiles = "users/" + username + "/files/";
+    doc = minidom.parse(pathToFiles + questionFile)
     selections = doc.getElementsByTagName("Selection")
     for selection in selections:
         identifier = selection.getElementsByTagName("SelectionIdentifier")[0]
         text = selection.getElementsByTagName("Text")[0]
         text_to_selid[text.firstChild.data] = identifier.firstChild.data
 
-    with open("../uploads/" + dataFile, 'rb') as readFile_obj:
+    with open(pathToFiles + dataFile, 'rb') as readFile_obj:
         # rename details file
         base = os.path.splitext(dataFile)[0]
         dataFile_updated = base + ".updatedDetails"
-        with open("../uploads/" + dataFile_updated, 'w+') as writeFile_obj:
+        with open(pathToFiles + dataFile_updated, 'w+') as writeFile_obj:
             writer = csv.writer(writeFile_obj)
             reader = csv.reader(readFile_obj)
             readFirstLine = False
@@ -40,7 +40,13 @@ def updateDetails(dataFile, primaryCol_name, urlCol_name, labelCol_name, questio
                 else:
                     # parse every other line
                     # write data to updated details file
-                    text = row[labelCol_index]
-                    selid = text_to_selid[text]
-                    writer.writerow([row[primaryCol_index], row[urlCol_index], selid])
+                    if haveLabels == 'true':
+                        text = row[labelCol_index]
+                        selid = text_to_selid[text]
+                        writer.writerow([row[primaryCol_index], row[urlCol_index], selid])
+                    else:
+                        writer.writerow([row[primaryCol_index], row[urlCol_index], "-1"])
 
+if __name__ == "__main__":
+    # updateDetails("sam", "face10.details", "PrimaryKey", "publishedURL", "orientation", "face10.question")
+    updateDetails(sys.argv[1], sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
