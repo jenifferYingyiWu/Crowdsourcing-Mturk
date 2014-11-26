@@ -1,0 +1,19 @@
+1- Download the result file from Amazon and make a copy of it:
+	cp Batch_orig_batch_results.csv Batch_p4_batch_results.csv
+
+2- In the result file, edit the header by removing the last two fields (Approve, Reject) so that all rows have the same number of fields
+
+3- Edit the MySQL script to load this CVS and generate the clean vertical/flat format that you want
+	vim devert_p4.mysql
+	cat devert_p4.mysql | mysql -u root
+	# run the script to this vertical format and turn it into a horizontal format
+	#python ~/bscripts/crowd_py/TurkParser/turk_result_to_aggregated_answers.py vertical_inputCSV primaryKeyName horizontal_outputCSV
+	python ~/bscripts/crowd_py/TurkParser/turk_result_to_aggregated_answers.py flat_p4_results.csv PK horizontal_p4.csv
+	#edit this command to sort according to the same order as your .vis file
+	sort -g -t , -k 1 horizontal_p4.csv > p4.crd
+	cut -d, -f 1 p4.crd > /tmp/1
+	cut -d, -f 1 p4.vis > /tmp/2
+	diff /tmp/1 /tmp/2 | wc -l
+
+4- Edit the .desc file to explain the format of your .crd file
+

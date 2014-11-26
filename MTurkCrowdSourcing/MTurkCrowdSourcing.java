@@ -44,6 +44,11 @@ import org.apache.commons.io.FileUtils;
 import org.w3c.dom.Document;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import java.sql.*;
 
 class Question {
     String qID;
@@ -63,13 +68,14 @@ class Answer {
 
 public class MTurkCrowdSourcing {
 
+    private String userPath;
     private String title;
     private String description;
     private int numAssignments;
     private double rewardPerHitInDollars;
     private double fractionToFail;
     private ArrayList<Question> allQuestions;
-    private List<List<Answer>> curResult;
+    static private List<List<Answer>> curResult;
     private long assignmentDurationInSeconds;
     private long autoApprovalDelayInSeconds;
     private long lifetimeInSeconds;
@@ -303,6 +309,13 @@ public class MTurkCrowdSourcing {
                 }
             }
         }
+        
+
+
+        
+        
+        
+        
         return result;
     }
     
@@ -432,7 +445,7 @@ public class MTurkCrowdSourcing {
     }
 
     static ArrayList<String> getList(String s){//seperated by commas, no space in between
-        ArrayList<String> result = new ArrayList<String>();
+        ArrayList<String> result = new ArrayList<>();
         if(s.isEmpty()){
             return result;
         }
@@ -456,158 +469,262 @@ public class MTurkCrowdSourcing {
       }
       return dir.delete();
     }
-    
 
     public static void main(String[] args) throws IOException, Exception{
+        
+        while (true){ 
+            System.out.println("in the while");
+            int doJava = 0;
+            Connection con = null;
+            Statement st = null;
+            ResultSet rs = null;
 
-        
-        
-        String username = args[0];
-        
-        String current = new java.io.File( "." ).getPath();
-        System.setProperty("user.dir", current+"/../users/"+username);
-        current = new java.io.File( "." ).getCanonicalPath();
-        
-        File dir = new File(current+"/tmp");
-        dir.mkdir();
+            String url = "jdbc:mysql://localhost:3306/activeLearner";
+            String user = "cs_mturk";
+            String password = "umdb2014";
 
-        String qFile = current+"/../../uploads/" + args[1];
-        String dataFile = current+"/../../uploads/" + args[2];
-        String title = args[3];
-        String description = args[4];
-        int numAssignments = Integer.parseInt(args[5]);//num of assignment per question/hit
-        double rewardPerHitInDollars = Double.parseDouble(args[6]);
-        int minGoldAnswer = Integer.parseInt(args[7]);//reject a worker if he gives answers to less than "minGoldAnswer" gold questions; useless field (set to 0) if the stategy is majorityAnswer
-        long assignmentDurationInSeconds  = Long.parseLong(args[8]);
-        long autoApprovalDelayInSeconds = Long.parseLong(args[9]);
-        long lifetimeInSeconds = Long.parseLong(args[10]);
-        String keywords = args[11];
-        long checkInterval = Long.parseLong(args[12]);//5 seconds
-        String idCol = args[13];//id/primaryKey
-        String goldCol = args[14];
-        ArrayList<String> sqNums = getList(args[15]);
-        ArrayList<String> gqNums = getList(args[16]);
-        String crowdHistoryFile = current+"/results/" + args[17];
+            try {
+                con = DriverManager.getConnection(url, user, password);
+                st = con.createStatement();
+                rs = st.executeQuery("SELECT * from doJava;");
 
-		double fractionToFail = 0.8;
-                
-        boolean ifPayRejected = Boolean.parseBoolean("False");//approve, not count towards the statistics
-        boolean ifBlockRejected = Boolean.parseBoolean("False");//if block rejected person
-        int blockMin = Integer.parseInt("10");//block a rejected worker if he have given blockMin or more answers
-        
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        /*
-        String username = "yao";
-        
-        String current = new java.io.File( "." ).getPath();
-        System.setProperty("user.dir", current+"/../users/"+username);
-        current = new java.io.File( "." ).getCanonicalPath();
-        
-        File dir = new File(current+"/tmp");
-        dir.mkdir();
+                if (rs.next()) {
+                    if (Integer.parseInt(rs.getString(1)) == 1)
+                        doJava = 1;
+                }
 
-        String qFile = current+"/../../uploads/face10.question";
-        String dataFile = current+"/../../uploads/face10.details";
-        String title = "face orientation detection";
-        String description = "determine the orientation of the face";
-        int numAssignments = 1;//num of assignment per question/hit
-        double rewardPerHitInDollars = 0.01;
-        double fractionToFail = 0.4;//reject a worker if his accuracy is below "fractionToFail", apply to both majorityAnswer and goldAnswer strategy
-        int minGoldAnswer = 0;//reject a worker if he gives answers to less than "minGoldAnswer" gold questions; useless field (set to 0) if the stategy is majorityAnswer
-        long assignmentDurationInSeconds  = 5 * 60;
-        long autoApprovalDelayInSeconds = 2 * 60 * 60;
-        long lifetimeInSeconds = 60 * 60;
-        String keywords = "face, orientation, picture, categorization, survey";
-        long checkInterval = 5 * 1000;//5 seconds
-        String idCol = "PrimaryKey";//id/primaryKey
-        String goldCol = "orientation";
-        ArrayList<String> sqNums = getList("2,3,4,6");
-        ArrayList<String> gqNums = getList("3,6");
-        String crowdHistoryFile = current+"/results/" + "myHistory";
-                
-        boolean ifPayRejected = true;//approve, not count towards the statistics
-        boolean ifBlockRejected = true;//if block rejected person
-        int blockMin = 2;//block a rejected worker if he have given blockMin or more answers
-        
-        
+            } catch (SQLException ex) {
+                System.out.println(ex);
+            } finally {
+                try {
+                    if (rs != null) {
+                        rs.close();
+                    }
+                    if (st != null) {
+                        st.close();
+                    }
+                    if (con != null) {
+                        con.close();
+                    }
 
-        */
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////
-        
-        Map<String, String> choices = new HashMap<String, String>();
-        
+                } catch (SQLException ex) {
+                    System.out.println("ERROR GOT");
 
-        FileWriter writer=new FileWriter(crowdHistoryFile);
-        writer.close();
-        
-        String fileContent = FileUtils.readFileToString(new File(qFile));
-        
-        
-        int start = fileContent.indexOf("<Selections>");
-        int end = fileContent.indexOf("</Selections>");
-        String questionField = fileContent.substring(start, end);
-        while(true){
-            start = questionField.indexOf("<Text>");
-            end = questionField.indexOf("</Text>");
-            if(start == -1){
-                break;
+                }
             }
-            String choice = questionField.substring(start + 6, end);
-            start = questionField.indexOf("<SelectionIdentifier>");
-            end = questionField.indexOf("</SelectionIdentifier>");
-            String identifier = questionField.substring(start + 21, end);
-            questionField = questionField.replaceFirst("<SelectionIdentifier>.*?</SelectionIdentifier>", "");
-            questionField = questionField.replaceFirst("<Text>.*?</Text>", "");
-            
-            choices.put(identifier, choice);
 
-        }
-        
-        //get the data
-        ArrayList<Question> allQuestions = new ArrayList<Question>();
-        CsvReader record = new CsvReader(dataFile);
-        record.readHeaders();
-        while (record.readRecord()){
-            String qID = record.get(idCol);
-            if(sqNums.contains(qID)){
-                Question q = new Question();
-                q.qID = qID;
 
-                String tmp = fileContent;
-                while(true){
-                    int i = tmp.indexOf("$");
-                    int j = tmp.indexOf("}");
-                    if(i != -1){
-                        String colName = tmp.substring(i+2, j);
+            if (doJava == 1){
+                // String filePath = args[0] + "/Applications/MAMP/htdocs/Crowdsourcing-Mturk/user/lslsheng/input.json";
+                String filePath = args[0] + "/input.json";   
+                FileReader reader = new FileReader(filePath);
+                JSONParser jsonParser = new JSONParser();
+                JSONObject jsonObject = (JSONObject) jsonParser.parse(reader);
+
+                String username = (String) jsonObject.get("username");
+                
+                String current = new java.io.File( "." ).getPath();
+                System.setProperty("user.dir", current+"/../users/"+username);
+                current = new java.io.File( "." ).getCanonicalPath();
+                File dir = new File(current+"/tmp");
+                dir.mkdir();
+
+                String qFile = current+"/../../uploads/" + (String)jsonObject.get("questionFile");
+                String dataFile = current+"/../../uploads/" + (String)jsonObject.get("detailFile");
+                String title =  (String)jsonObject.get("title");
+                String description =  (String)jsonObject.get("description");
+                int numAssignments = Integer.parseInt((String)jsonObject.get("numAssignments"));//num of assignment per question/hit
+                double rewardPerHitInDollars = Double.parseDouble((String)jsonObject.get("reward"));
+                double fractionToFail = Double.parseDouble((String)jsonObject.get("fractionToFail"));//reject a worker if his accuracy is below "fractionToFail", apply to both majorityAnswer and goldAnswer strategy
+                int minGoldAnswer = Integer.parseInt((String)jsonObject.get("minGoldAnswered"));//reject a worker if he gives answers to less than "minGoldAnswer" gold questions; useless field (set to 0) if the stategy is majorityAnswer
+                long assignmentDurationInSeconds  = Long.parseLong((String)jsonObject.get("duration"));  
+                long autoApprovalDelayInSeconds = Long.parseLong((String)jsonObject.get("autoApprovalDelay"));
+                long lifetimeInSeconds = Long.parseLong((String)jsonObject.get("lifetime"));
+                String keywords = (String)jsonObject.get("keywords");
+                long checkInterval = Long.parseLong((String)jsonObject.get("checkInterval"));//5 seconds
+                String idCol = (String)jsonObject.get("idCol");//id/primaryKey
+                String goldCol = (String)jsonObject.get("goldCol");
+                ArrayList<String> sqNums = getList(((String)jsonObject.get("keys_of_selected")).trim().replaceAll(" +",","));
+                ArrayList<String> gqNums = getList((String)jsonObject.get("keys_of_gold"));
+                String crowdHistoryFile = current+"/results/" + (String)jsonObject.get("csHistory");
                         
-                        tmp = tmp.replaceAll("\\$" + "\\{"+colName+"}", record.get(colName));
-                    }else{
+                boolean ifPayRejected = Boolean.parseBoolean((String)jsonObject.get("ifPayRejected"));//approve, not count towards the statistics
+                boolean ifBlockRejected = Boolean.parseBoolean((String)jsonObject.get("ifBlockRejected"));//if block rejected person
+                int blockMin = Integer.parseInt((String)jsonObject.get("accuracy_block"));//block a rejected worker if he have given blockMin or more answers
+                
+                
+                
+                ////////////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////
+                /*
+                String username = "lslsheng";
+                
+                String current = new java.io.File( "." ).getPath();
+                System.setProperty("user.dir", current+"/../users/"+username);
+                current = new java.io.File( "." ).getCanonicalPath();
+                
+                File dir = new File(current+"/tmp");
+                dir.mkdir();
+
+                String qFile = current+"/../../uploads/face10.question";
+                String dataFile = current+"/../../uploads/face10.details";
+                String title = "face orientation detection";
+                String description = "determine the orientation of the face";
+                int numAssignments = 1;//num of assignment per question/hit
+                double rewardPerHitInDollars = 0.01;
+                double fractionToFail = 0.4;//reject a worker if his accuracy is below "fractionToFail", apply to both majorityAnswer and goldAnswer strategy
+                int minGoldAnswer = 0;//reject a worker if he gives answers to less than "minGoldAnswer" gold questions; useless field (set to 0) if the stategy is majorityAnswer
+                long assignmentDurationInSeconds  = 5 * 60;
+                long autoApprovalDelayInSeconds = 2 * 60 * 60;
+                long lifetimeInSeconds = 60 * 60;
+                String keywords = "face, orientation, picture, categorization, survey";
+                long checkInterval = 5 * 1000;//5 seconds
+                String idCol = "PrimaryKey";//id/primaryKey
+                String goldCol = "orientation";
+                ArrayList<String> sqNums = getList("2,3,4,6");
+                ArrayList<String> gqNums = getList("3,6");
+                String crowdHistoryFile = current+"/results/" + "myHistory";
+                        
+                boolean ifPayRejected = true;//approve, not count towards the statistics
+                boolean ifBlockRejected = true;//if block rejected person
+                int blockMin = 2;//block a rejected worker if he have given blockMin or more answers
+                
+                
+
+                */
+                ////////////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////
+                ////////////////////////////////////////////////////////////////////////////////////
+                
+                Map<String, String> choices = new HashMap<String, String>();
+                
+
+                FileWriter writer=new FileWriter(crowdHistoryFile);
+                writer.close();
+                
+                String fileContent = FileUtils.readFileToString(new File(qFile));
+                
+                
+                int start = fileContent.indexOf("<Selections>");
+                int end = fileContent.indexOf("</Selections>");
+                String questionField = fileContent.substring(start, end);
+                while(true){
+                    start = questionField.indexOf("<Text>");
+                    end = questionField.indexOf("</Text>");
+                    if(start == -1){
                         break;
                     }
-                }
-                q.qString = tmp;
+                    String choice = questionField.substring(start + 6, end);
+                    start = questionField.indexOf("<SelectionIdentifier>");
+                    end = questionField.indexOf("</SelectionIdentifier>");
+                    String identifier = questionField.substring(start + 21, end);
+                    questionField = questionField.replaceFirst("<SelectionIdentifier>.*?</SelectionIdentifier>", "");
+                    questionField = questionField.replaceFirst("<Text>.*?</Text>", "");
+                    
+                    choices.put(identifier, choice);
 
-                if(gqNums.contains(qID)){
-                    q.goldAnswer = record.get(goldCol);
-                }else{
-                    q.goldAnswer = "";
                 }
-                allQuestions.add(q);
+                
+                //get the data
+                ArrayList<Question> allQuestions = new ArrayList<Question>();
+                CsvReader record = new CsvReader(dataFile);
+                record.readHeaders();
+                while (record.readRecord()){
+                    String qID = record.get(idCol);
+                    if(sqNums.contains(qID)){
+                        Question q = new Question();
+                        q.qID = qID;
+
+                        String tmp = fileContent;
+                        while(true){
+                            int i = tmp.indexOf("$");
+                            int j = tmp.indexOf("}");
+                            if(i != -1){
+                                String colName = tmp.substring(i+2, j);
+                                
+                                tmp = tmp.replaceAll("\\$" + "\\{"+colName+"}", record.get(colName));
+                            }else{
+                                break;
+                            }
+                        }
+                        q.qString = tmp;
+
+                        if(gqNums.contains(qID)){
+                            q.goldAnswer = record.get(goldCol);
+                        }else{
+                            q.goldAnswer = "";
+                        }
+                        allQuestions.add(q);
+                    }
+                }
+                
+                MTurkCrowdSourcing cs = new MTurkCrowdSourcing(title, description, numAssignments,
+                    rewardPerHitInDollars, fractionToFail, 
+                    allQuestions, assignmentDurationInSeconds,
+                    autoApprovalDelayInSeconds, lifetimeInSeconds,
+                    keywords, choices, checkInterval, qFile,crowdHistoryFile, minGoldAnswer,
+                    ifPayRejected,ifBlockRejected,blockMin);
+            
+                cs.run();
+
+                try {
+                    con = DriverManager.getConnection(url, user, password);
+                    st = con.createStatement();
+
+                    String query = "UPDATE doJava SET runJava=0 where runJava = 1;";
+                    PreparedStatement preparedStmt = con.prepareStatement(query);
+                    // execute the java preparedstatement
+                    preparedStmt.executeUpdate();
+
+                    query = "TRUNCATE TABLE resultT;";
+                    PreparedStatement preparedStmt3 = con.prepareStatement(query);
+                    // execute the java preparedstatement
+                    preparedStmt3.executeUpdate();
+
+                    for(int i=0; i<allQuestions.size();i++){
+                        Question q = allQuestions.get(i);
+                        String query2 = " insert into resultT "
+                                    + " values (" + q.qID + ", " + curResult.get(i).get(0).identifier + ")";
+                        PreparedStatement preparedStmt2 = con.prepareStatement(query2);
+                        preparedStmt2.executeUpdate();
+                    }
+
+
+
+
+
+
+                } catch (SQLException ex) {
+                    System.out.println(ex);
+                } finally {
+                    try {
+                        if (rs != null) {
+                            rs.close();
+                        }
+                        if (st != null) {
+                            st.close();
+                        }
+                        if (con != null) {
+                            con.close();
+                        }
+
+                    } catch (SQLException ex) {
+                        System.out.println("ERROR GOT");
+
+                    }
+                }
+            }
+            else {
+                try {
+                    Thread.sleep(5000);                 //1000 milliseconds is one second.
+                } catch(InterruptedException ex) {
+                    Thread.currentThread().interrupt();
+                }
             }
         }
         
-        MTurkCrowdSourcing cs = new MTurkCrowdSourcing(title, description, numAssignments,
-            rewardPerHitInDollars, fractionToFail, 
-            allQuestions, assignmentDurationInSeconds,
-            autoApprovalDelayInSeconds, lifetimeInSeconds,
-            keywords, choices, checkInterval, qFile,crowdHistoryFile, minGoldAnswer,
-            ifPayRejected,ifBlockRejected,blockMin);
         
-        cs.run();
         
     }
 }

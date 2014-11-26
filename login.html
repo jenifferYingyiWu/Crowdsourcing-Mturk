@@ -1,24 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <title>Login</title>
 <style>
-	a:visited { color: blue; }
+.form-signin {
+	max-width: 330px;
+}
+input[name='username'], input[name='password'], button[type='submit'] {
+	margin-bottom: 10px;
+}
 </style>
 </head>
 <body>
+<center>
 <h4>This website provides systematic way to crowdsource labels for your dataset 
 	through Amazon Mechanical Turk.</h4>
-<fieldset style="width:30%">
-<legend>Login Form</legend>
-<table border="0">
-<form method="POST" action="login.php">
-<tr><td>Username</td> <td><input type="text" name="username"></td></tr>
-<tr><td>Password</td> <td><input type="password" name="password"></td></tr>
-<tr><td><input type="submit" name="submit" value="Log In"></td></tr>
-</form>
-</table>
+<div class="container">
+<form class="form-signin" method="POST" action="login.php">
+<h2 class="form-signin-heading">Please sign in</h2>
+<label class="sr-only">Username</label> 
+<input class="form-control" type="text" name="username" placeholder="Username" required>
+<label class="sr-only">Password</label> 
+<input class="form-control" type="password" name="password" placeholder="Password" required>
+<button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
 <a href="register.html">Register</a> | <a href="recovery.html">Forgot username or password?</a>
-</fieldset>
+</form>
+</div>
+</center>
 </body>
 </html>

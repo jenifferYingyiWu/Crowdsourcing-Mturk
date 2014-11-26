@@ -1,0 +1,1 @@
+To install the toolbox, simply unpack the package RLS2.zip into some folder and add that folder to the MATLAB path, by selecting "Set Path..." from the File menu. To enable the export to PDF feature of the GUI, you need to download the script save2pdf.m and save it into the Matlab path. 

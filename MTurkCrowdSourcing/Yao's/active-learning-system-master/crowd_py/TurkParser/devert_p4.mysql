@@ -1,0 +1,122 @@
+use al;
+
+drop table if exists amazon;
+create table amazon (
+	HITId varchar(255) collate latin1_swedish_ci,
+	HITTypeId varchar(255) collate latin1_swedish_ci,
+	Title varchar(255) collate latin1_swedish_ci,
+	Description varchar(255) collate latin1_swedish_ci,
+	Keywords varchar(255) collate latin1_swedish_ci,
+	Reward varchar(255) collate latin1_swedish_ci,
+	CreationTime varchar(255) collate latin1_swedish_ci,
+	MaxAssignments varchar(255) collate latin1_swedish_ci,
+	RequesterAnnotation varchar(255) collate latin1_swedish_ci,
+	AssignmentDurationInSeconds varchar(255) collate latin1_swedish_ci,
+	AutoApprovalDelayInSeconds varchar(255) collate latin1_swedish_ci,
+	Expiration varchar(255) collate latin1_swedish_ci,
+	NumberOfSimilarHITs varchar(255) collate latin1_swedish_ci,
+	LifetimeInSeconds varchar(255) collate latin1_swedish_ci,
+	AssignmentId varchar(255) collate latin1_swedish_ci,
+	WorkerId varchar(255) collate latin1_swedish_ci,
+	AssignmentStatus varchar(255) collate latin1_swedish_ci,
+	AcceptTime varchar(255) collate latin1_swedish_ci,
+	SubmitTime varchar(255) collate latin1_swedish_ci,
+	AutoApprovalTime varchar(255) collate latin1_swedish_ci,
+	ApprovalTime varchar(255) collate latin1_swedish_ci,
+	RejectionTime varchar(255) collate latin1_swedish_ci,
+	RequesterFeedback varchar(255) collate latin1_swedish_ci,
+	WorkTimeInSeconds varchar(255) collate latin1_swedish_ci,
+	LifetimeApprovalRate varchar(255) collate latin1_swedish_ci,
+	Last30DaysApprovalRate varchar(255) collate latin1_swedish_ci,
+	Last7DaysApprovalRate varchar(255) collate latin1_swedish_ci,
+	PK_R1 varchar(255) collate latin1_swedish_ci,
+	fname_R1 varchar(255) collate latin1_swedish_ci,
+	user_R1 varchar(255) collate latin1_swedish_ci,
+	orientation_R1 varchar(255) collate latin1_swedish_ci,
+	expression_R1 varchar(255) collate latin1_swedish_ci,
+	eye_R1 varchar(255) collate latin1_swedish_ci,
+	url_R1 varchar(255) collate latin1_swedish_ci,
+	PK_R2 varchar(255) collate latin1_swedish_ci,
+	fname_R2 varchar(255) collate latin1_swedish_ci,
+	user_R2 varchar(255) collate latin1_swedish_ci,
+	orientation_R2 varchar(255) collate latin1_swedish_ci,
+	expression_R2 varchar(255) collate latin1_swedish_ci,
+	eye_R2 varchar(255) collate latin1_swedish_ci,
+	url_R2 varchar(255) collate latin1_swedish_ci,
+	PK_R3 varchar(255) collate latin1_swedish_ci,
+	fname_R3 varchar(255) collate latin1_swedish_ci,
+	user_R3 varchar(255) collate latin1_swedish_ci,
+	orientation_R3 varchar(255) collate latin1_swedish_ci,
+	expression_R3 varchar(255) collate latin1_swedish_ci,
+	eye_R3 varchar(255) collate latin1_swedish_ci,
+	url_R3 varchar(255) collate latin1_swedish_ci,
+	PK_R4 varchar(255) collate latin1_swedish_ci,
+	fname_R4 varchar(255) collate latin1_swedish_ci,
+	user_R4 varchar(255) collate latin1_swedish_ci,
+	orientation_R4 varchar(255) collate latin1_swedish_ci,
+	expression_R4 varchar(255) collate latin1_swedish_ci,
+	eye_R4 varchar(255) collate latin1_swedish_ci,
+	url_R4 varchar(255) collate latin1_swedish_ci,
+	Answer1 varchar(255) collate latin1_swedish_ci,
+	Answer2 varchar(255) collate latin1_swedish_ci,
+	Answer3 varchar(255) collate latin1_swedish_ci,
+	Answer4 varchar(255) collate latin1_swedish_ci
+);
+
+LOAD DATA INFILE '/Users/sina/crowd/segmentation/turk/Batch_p4_batch_results.csv'
+  INTO TABLE amazon 
+    FIELDS TERMINATED BY ','
+    ENCLOSED BY '"'
+    LINES TERMINATED BY '\r'
+    IGNORE 1 LINES;
+
+drop table if exists devert;
+create table devert (PK int, 
+	user varchar(255) collate latin1_swedish_ci,
+	orientation varchar(255) collate latin1_swedish_ci, 
+	expression varchar(255) collate latin1_swedish_ci,
+	eye varchar(255) collate latin1_swedish_ci,
+        worker  varchar(255) collate latin1_swedish_ci,
+	answer varchar(255) collate latin1_swedish_ci
+);
+
+insert into devert select PK_R1, user_R1, orientation_R1, expression_R1, eye_R1, WorkerId, Answer1 from amazon;
+insert into devert select PK_R2, user_R2, orientation_R2, expression_R2, eye_R2, WorkerId, Answer2 from amazon;
+insert into devert select PK_R3, user_R3, orientation_R3, expression_R3, eye_R3, WorkerId, Answer3 from amazon;
+insert into devert select PK_R4, user_R4, orientation_R4, expression_R4, eye_R4, WorkerId, Answer4 from amazon;
+
+drop view if exists correct;
+create view correct as select *, expression=answer as corr, expression='neutral' as isNatural, expression='happy' as isHappy, expression='sad' as isSad, expression='angry' as isAngry from devert;
+
+SELECT 'PK', 'worker', 'isNatural', 'isHappy', 'isSad', 'isAngry'
+UNION
+(SELECT PK, worker, isNatural, isHappy, isSad, isAngry INTO OUTFILE '/tmp/flat_p4_results.csv'
+FIELDS TERMINATED BY ','
+LINES TERMINATED BY '\r\n'
+FROM correct
+ORDER BY PK);
+
+
+quit
+
+-- by user
+select user, avg(corr) as accuracy from correct group by user order by accuracy desc;
+select orientation, avg(corr) as accuracy from correct group by orientation order by accuracy desc;
+select expression, avg(corr) as accuracy from correct group by expression order by accuracy desc;
+select eye, avg(corr) as accuracy from correct group by eye order by accuracy desc;
+
+select orientation, expression, avg(corr) as accuracy from correct group by orientation, expression order by accuracy desc;
+
+select orientation, expression, eye, avg(corr) as accuracy from correct group by orientation, expression, eye order by accuracy desc;
+
+select user, expression, avg(corr) as accuracy from correct group by user, expression order by accuracy desc;
+
+drop table if exists temp;
+create table temp as select user from correct group by user having avg(corr)  < 0.6;
+delete from devert where user in (select user from  temp);
+
+
+
+
+
+

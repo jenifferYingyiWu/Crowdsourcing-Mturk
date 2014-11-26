@@ -1,25 +1,43 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css">
 <title>Register</title>
-<style>
-	a:visited { color: blue; }
-</style>
 </head>
-<fieldset style="width:35%">
-<legend>Registration Form</legend>
-<table border="0" id="topTable">
 <form method="POST" action="register.php">
-<tr><td>Username</td> <td><input type="text" name="username"></td></tr>
-<tr><td>Email</td> <td><input type="text" name="email"></td></tr>
-<tr><td>Password</td> <td><input type="password" name="password1"></td></tr>
-<tr><td>Confirm Password</td> <td><input type="password" name="password2"></td></tr>
-<tr><td>AWS Access Key ID</td> <td><input type="text" name="accessKeyID"></td></tr>
-<tr><td>AWS Secret Access Key</td> <td><input type="text" name="secretAccessKey"></td></tr>
-<tr><td><a target="_blank" href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">
-	How to get AWS access keys</a></tr>
-<tr><td><input type="submit" name="submit" value="Sign Up"></td></tr>
+
+<div class="form-group">
+<label>Username</label> 
+<input class="form-control" type="text" name="username">
+</div>
+
+<div class="form-group">
+<label>Email</label> 
+<input class="form-control" type="text" name="email">
+</div>
+
+<div class="form-group">
+<label>Password</label> 
+<input class="form-control" type="password" name="password1">
+</div>
+
+<div class="form-group">
+<label>Confirm Password</label> 
+<input class="form-control" type="password" name="password2">
+</div>
+
+<div class="form-group">
+<label>AWS Access Key ID</label> 
+<input class="form-control" type="text" name="accessKeyID">
+</div>
+
+<div class="form-group">
+<label>Secret Access Key</label> 
+<input type="text" class="form-control" name="secretAccessKey">
+</div>
+
+<a target="_blank" href="http://docs.aws.amazon.com/AWSSimpleQueueService/latest/SQSGettingStartedGuide/AWSCredentials.html">
+	How to get AWS access keys</a><br><br>
+<input type="submit" name="submit" value="Sign Up">
 </form>
-</table>
-</fieldset>
 </html>

@@ -19,6 +19,7 @@
 		$password_encrypted = hash('sha256', $userData['salt'] . $password);
 		if ($password_encrypted == $userData['encryptedPassword']) {
 			$_SESSION['username'] = $username;
+			$_SESSION['loggedin'] = true;
 			header('location: home.php');
 		}
 		else

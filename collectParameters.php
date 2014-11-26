@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!(isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == true)) {
+	header('Location: login.html');
+	die();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -10,9 +17,8 @@
 </head>
 <body>
 <?php
-session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-	header('Location: uploadFiles.html');	
+	header('Location: uploadFiles.php');	
 }
 
 // if there was an error opening the files

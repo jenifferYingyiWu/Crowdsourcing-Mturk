@@ -1,0 +1,14 @@
+In entity2.dat files, we have:
+    primaryKey, realLabel, (i-th userId, i-th crowdLabel),  feature1(=Levenshtein distance of name), feature2(=CosineSimilarity of name), feature3(Levenshtein distance of description), feature4(=CosineSimilarity of description)
+
+In entity2.details files, we have:
+    primaryKey, realLabel, Abt.com_id, Buy.com_id, numberOfFeaturesFromAbt.com(=3), featuresFromAbt.com, numberOfFeaturesFromBuy.com(=4), featuresFromBuy.com
+
+where the featuresFromAbt.com are: 
+"name","description","price"
+
+and features from Buy.com are:
+"name","description","manufacturer","price"
+
+
+

@@ -1,0 +1,189 @@
+function gen_cmu_dataset(randSeed, inputDir, outputFilename, outputDir, publishURL)
+% Example: gen_cmu_dataset(10, '/tmp/faces-sep-jpg/', 'face4', './sym-links', 'http://vise4.csail.mit.edu/p4');
+
+overallTime = tic;
+
+expressions = {'neutral', 'happy', 'sad', 'angry'};
+eyes = {'open', 'sunglasses'};
+orientations = {'straight', 'left', 'right', 'up'};
+
+
+conf.calDir = inputDir;
+conf.autoDownloadData = false;
+conf.numTrain = 15 ;
+conf.numTest = 15 ;
+conf.numClasses = 102 ;
+conf.numWords = 600 ;
+conf.numSpatialX = [2 4] ;
+conf.numSpatialY = [2 4] ;
+conf.quantizer = 'kdtree' ;
+conf.svm.C = 10 ;
+conf.svm.solver = 'pegasos' ;
+conf.svm.biasMultiplier = 1 ;
+conf.phowOpts = {'Step', 3} ;
+conf.clobber = false ;
+conf.tinyProblem = false ;
+conf.prefix = 'baseline' ;
+conf.randSeed = randSeed;
+
+if conf.tinyProblem
+  conf.prefix = 'tiny' ;4
+  conf.numClasses = 5 ;
+  conf.numSpatialX = 2 ;
+  conf.numSpatialY = 2 ;
+  conf.numWords = 300 ;
+  conf.phowOpts = {'Verbose', 0, 'Sizes', 7, 'Step', 5} ;
+end
+
+randn('state',conf.randSeed) ;
+rand('state',conf.randSeed) ;
+vl_twister('state',conf.randSeed) ;
+
+% --------------------------------------------------------------------
+%                                                           Setup data
+% --------------------------------------------------------------------
+
+allBatches = {};
+users = dir(conf.calDir);
+users = {users(3:end).name};
+for u = 1:length(users)
+    for o=1:length(orientations)
+        for e=1:length(eyes)
+            batch = [];
+            for expr=1:length(expressions)
+                fname = fullfile(conf.calDir, users{u}, [users{u} '_' orientations{o} '_' expressions{expr} '_' eyes{e} '.jpg']);
+                if ~ exist(fname, 'file')
+                    break;
+                end
+                batch(end+1).image = fname;
+                batch(end).imageClass = struct('user', users{u}, 'orientation', orientations{o}, 'expression', expressions{expr}, 'eye', eyes{e});
+                im = imread(batch(end).image);
+                im = standarizeImage(im) ;
+                dim = size(im);
+                if length(dim)==2
+                    dim = [dim 1];
+                end
+                batch(end).dimensions = dim;
+                batch(end).rawImage = reshape(im, 1, prod(dim));
+            end
+            batch = batch(randperm(length(batch)));
+            if length(batch)==length(expressions) % since there might be bad pictures
+                allBatches{end+1} = batch;
+            end
+        end
+    end
+end
+
+%model.classes = classes ;
+model.phowOpts = conf.phowOpts ;
+model.numSpatialX = conf.numSpatialX ;
+model.numSpatialY = conf.numSpatialY ;
+model.quantizer = conf.quantizer ;
+model.vocab = [] ;
+model.w = [] ;
+model.b = [] ;
+%model.classify = @classify ;
+
+batchSize = length(allBatches{1});
+allBatches = allBatches(randperm(length(allBatches)));
+nextPK = 1;
+maxLen = 0;
+flatImages = {};
+for b=1:length(allBatches)
+    for bi=1:batchSize
+        allBatches{b}(bi).PK = nextPK;
+        nextPK = nextPK+1;
+        maxLen = max(maxLen, prod(allBatches{b}(bi).dimensions, 2));
+        R = allBatches{b}(bi);
+        flatImages{end+1} = R;
+    end
+end
+flatImages = cat(1, flatImages{1:end});
+
+%for amazon
+fid = fopen([outputFilename '.csv'], 'w');
+%header
+for bi=1:batchSize
+    fprintf(fid, 'PK_R%d, fname_R%d, user_R%d, orientation_R%d, expression_R%d, eye_R%d, url_R%d', bi, bi, bi, bi, bi, bi, bi);
+    if bi==batchSize
+        fprintf(fid,'\n');
+    else
+        fprintf(fid,',');
+    end
+end
+%body
+for b=1:length(allBatches)
+    for bi=1:batchSize
+        R = allBatches{b}(bi);
+        fprintf(fid, '%d, %s, %s, %s, %s, %s, %s', R.PK, R.image, R.imageClass.user, R.imageClass.orientation, R.imageClass.expression, R.imageClass.eye, [publishURL '/' num2str(R.PK) '.jpg']);
+        system(['ln -s ' R.image ' ' outputDir '/' num2str(R.PK) '.jpg']);
+        if bi==batchSize
+            fprintf(fid,'\n');
+        else
+            fprintf(fid,',');
+        end
+    end
+end
+fclose(fid);
+
+    nImages = length(flatImages);
+    matrix = zeros(nImages, maxLen);
+    for ii=1:nImages
+        im = flatImages(ii).rawImage;
+        matrix(ii,1:length(im)) = im;      
+    end
+    classes = cat(1, flatImages(1:end).imageClass);
+    binOrien = zeros(nImages, length(orientations));
+    for o=1:length(orientations)
+        binOrien(:,o) = strcmp(orientations{o}, {classes.orientation})';
+    end
+    binEyes = zeros(nImages, length(eyes));
+    for e=1:length(eyes)
+        binEyes(:,e) = strcmp(eyes{e}, {classes.eye})';
+    end
+    binExpr = zeros(nImages, length(expressions));
+    for expr=1:length(expressions)
+        binExpr(:,expr) = strcmp(expressions{expr}, {classes.expression})';
+    end
+  PKs = cat(1, flatImages.PK);
+  dimensions = cat(1, flatImages.dimensions);
+  dataset = [PKs binOrien binEyes binExpr dimensions matrix]; 
+  
+  fid = fopen([outputFilename '.desc'], 'w');
+  fprintf(fid, 'This dataset was generated by gen_cmu_dataset with these params: randSeed=%d, inputDir=%s, outputFilename=%s, outputDir=%s, publishURL=%s\n', randSeed, inputDir, outputFilename, outputDir, publishURL);
+  
+  fprintf(fid, '\nThe format in %s is as follows (the first line is just headers):\n', [outputFilename '.csv']);
+  fprintf(fid, 'primaryKey_R1, filename_R1, user_R1, orientation_R1, expression_R1, eye_R1, url_R1, primaryKey_R2, ...\n');
+  fprintf(fid, '\t where the above fields are repeated for R1,...,R%d\n', batchSize);
+  
+  fprintf(fid, '\nThe format in %s is as follows:\n', [outputFilename '.vis']);
+  fprintf(fid, 'PrimaryKey, isStraight, isLeft, isRight, isUp, isOpen, isSunglasses, isNeutral, isHappy, isSad, isAngry, dimension1, dimension2, dimension3, feature1, ..., feature%d\n\n', maxLen);
+  fprintf(fid, '\nThe format in %s is as follows:\n', [outputFilename '.details']);
+  fprintf(fid, 'PrimaryKey, imageName, user, orientation, eye, expression\n');
+
+  fclose(fid);
+  
+dlmwrite([outputFilename '.vis'], dataset, 'delimiter', ',');
+fprintf(1, 'The raw images are stored.\n');
+fdet = fopen([outputFilename '.details'], 'w');
+fprintf(fdet, 'PrimaryKey, imageName, user, orientation, eye, expression, publishedURL\n');
+for i=1:nImages
+   [pathstr, name, ext] = fileparts(flatImages(i).image); 
+   fprintf(fdet, '%d, %s, %s, %s, %s, %s, %s\n', PKs(i), [name ext], classes(i).user, classes(i).orientation, classes(i).eye, classes(i).expression, [publishURL '/' num2str(PKs(i)) '.jpg']);
+end
+fclose(fdet);
+fprintf(1, 'finished writing the details');
+
+elapsed = toc(overallTime);
+fprintf(1,'elapsed time=%f\n',elapsed);
+
+
+
+% -------------------------------------------------------------------------
+function im = standarizeImage(im)
+% -------------------------------------------------------------------------
+
+im = im2single(im) ;
+if size(im,1) > 480, im = imresize(im, [480 NaN]) ; end
+
+

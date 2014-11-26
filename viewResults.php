@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!(isset($_SESSION['loggedin']) || $_SESSION['loggedin'] == true)) {
+	header('Location: login.html');
+	die();
+}
+?>
 <!DOCTYPE html>
 <html>
 <head>
@@ -8,7 +15,6 @@
 </head>
 <body>
 <?php
-session_start();
 $username = $_SESSION['username'];
 $resultsDir = 'users/' . $username . '/results/';
 $noFiles = True;

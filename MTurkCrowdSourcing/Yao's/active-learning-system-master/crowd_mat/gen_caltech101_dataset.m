@@ -1,0 +1,207 @@
+function gen_caltech101_dataset(randSeed, inputDir, outputFilename, publishURL, useGrayScale, imageReductionRate, varargin)
+% focalClass, otherClasses, howManyOfFocalClass, howManyOfOtherClasses
+
+%gen_caltech101_dataset(1234, '~/crowd/segmentation/caltech101/data/renamed/',  'vision-test', 'http://vise4.csail.mit.edu/test', false, 1, {'FacesSingle'}, 1, {'FacesOthers', 'laptop'}, 3, {'FacesMale', 'FacesFemale'}, 3);
+%gen_caltech101_dataset(1234, '~/crowd/segmentation/CMU/faces-jpg-renamed/',  'vision-4face-expr', 'http://vise4.csail.mit.edu/fe4', false, 1, {'NEUTRAL'}, 500, {'HAPPY'}, 500, {'SAD'}, 500, {'ANGRY'}, 500);
+%gen_caltech101_dataset(1234, '~/crowd/segmentation/caltech101/data/renamed/',  'gender', 'http://vise4.csail.mit.edu/gender', false, 1, {'FacesMale'}, 500, {'FacesFemale'}, 500);
+%gen_caltech101_dataset(1234, '~/crowd/segmentation/caltech101/data/renamed/',  'gender', 'http://vise4.csail.mit.edu/gender', true, 0.2, {'FacesMale'}, 2, {'FacesFemale'}, 2);
+%gen_caltech101_dataset(1234, '~/crowd/segmentation/caltech101/data/renamed/',  'gender', 'http://vise4.csail.mit.edu/gender', true, 0.2, {'FacesMale'}, 500, {'FacesFemale'}, 500);
+
+overallTime = tic;
+
+if mod(length(varargin), 2)~=0 || length(varargin)<4
+    error('You need to specify at least two classes');
+end
+
+chosenClasses = {};
+howMany = [];
+for i=1:length(varargin)/2
+    chosenClasses{end+1} = varargin{2*i-1};
+    howMany(end+1) = varargin{2*i};
+end
+
+conf.calDir = inputDir;
+conf.autoDownloadData = false ;
+conf.numTrain = 15 ;
+conf.numTest = 15 ;
+conf.numClasses = 102 ;
+conf.numWords = 600 ;
+conf.numSpatialX = [2 4] ;
+conf.numSpatialY = [2 4] ;
+conf.quantizer = 'kdtree' ;
+conf.svm.C = 10 ;
+conf.svm.solver = 'pegasos' ;
+conf.svm.biasMultiplier = 1 ;
+conf.phowOpts = {'Step', 3} ;
+conf.clobber = false ;
+conf.tinyProblem = false ;
+conf.prefix = 'baseline' ;
+conf.randSeed = randSeed;
+
+if conf.tinyProblem
+  conf.prefix = 'tiny' ;
+  conf.numClasses = 5 ;
+  conf.numSpatialX = 2 ;
+  conf.numSpatialY = 2 ;
+  conf.numWords = 300 ;
+  conf.phowOpts = {'Verbose', 0, 'Sizes', 7, 'Step', 5} ;
+end
+
+randn('state',conf.randSeed) ;
+rand('state',conf.randSeed) ;
+vl_twister('state',conf.randSeed) ;
+
+% --------------------------------------------------------------------
+%                                                           Setup data
+% --------------------------------------------------------------------
+classes = dir(conf.calDir) ;
+classes = classes([classes.isdir]) ;
+classes = {classes(3:end).name} ;
+
+allClassIdx = {};
+for c=1:length(chosenClasses)
+    thisClassIdx = [];
+    for cc=1:length(chosenClasses{c})
+        thisClassIdx(end+1) = find(strcmp(classes, chosenClasses{c}{cc}));
+    end
+    if isempty(thisClassIdx) || length(thisClassIdx)~=length(chosenClasses{c})
+        error('Some of your classes are invalid...');
+    end
+    allClassIdx{end+1} = thisClassIdx;
+end
+
+
+
+classesIdx = cat(2, allClassIdx{:});
+classes = classes(classesIdx);
+
+images = {} ;
+imageClass = {} ;
+for ci = 1:length(classes)
+  ims = dir(fullfile(conf.calDir, classes{ci}, '*.jpg'))' ;
+  ims = cellfun(@(x)fullfile(classes{ci},x),{ims.name},'UniformOutput',false) ;
+  images = {images{:}, ims{:}} ;
+  imageClass{end+1} = classesIdx(ci) * ones(1,length(ims)) ;
+end
+imageClass = cat(2, imageClass{:}) ; % from now on, imageClass is an array!
+
+model.classes = classes ;
+model.phowOpts = conf.phowOpts ;
+model.numSpatialX = conf.numSpatialX ;
+model.numSpatialY = conf.numSpatialY ;
+model.quantizer = conf.quantizer ;
+model.vocab = [] ;
+model.w = [] ;
+model.b = [] ;
+model.classify = @classify ;
+
+perm = randperm(length(imageClass));
+images = images(perm);
+imageClass = imageClass(perm);
+nPicked = zeros(size(howMany));
+
+imgName = {};
+rawImages = {};
+dimensions = zeros(0,3);
+chosenImageClass = [];
+nImages = length(images);
+  for ii = 1:nImages
+    c=findSet(imageClass(ii), allClassIdx);
+    if nPicked(c)==howMany(c)
+        continue;
+    end
+    nPicked(c) = nPicked(c)+1;
+    
+    imgName{end+1} = fullfile(conf.calDir, images{ii});
+    im = imread(imgName{end});
+    if length(size(im))==3 && useGrayScale
+        im = rgb2gray(im);
+    end
+    im = imresize(im, imageReductionRate);
+    im = standarizeImage(im) ;
+    dim = size(im);
+    if length(dim)==2
+        dim = [dim 1];
+    end
+    dimensions(end+1,1:3) = dim;
+    chosenImageClass(end+1) = imageClass(ii);
+    rawImages{end+1} = reshape(im, 1, prod(dimensions(end,1:3)));
+  end
+    
+  maxLen = max(prod(dimensions, 2));
+  nImages = length(rawImages);
+  matrix = zeros(nImages, maxLen);
+  for ii=1:nImages
+    im = rawImages{ii};
+    matrix(ii,1:length(im)) = im;      
+  end
+  PK = (1:nImages)';
+  binClasses = zeros(size(chosenImageClass));
+  binClasses(:) = findSet(chosenImageClass, allClassIdx) - 1;
+%  dataset = [num2cell(PK) num2cell(binClasses') imgName' num2cell(dimensions) num2cell(matrix)];
+  dataset = [PK binClasses' dimensions matrix]; 
+  
+  fid = fopen([outputFilename '.desc'], 'w');
+  fprintf(fid, 'This dataset was generated by gen_caltech101_dataset with these params: randSeed=%d, inputDir=%s, and the following groups of classes (numbers in parenthesis is how many of each):\n', randSeed, inputDir);
+  for s=1:length(chosenClasses)
+      fprintf(fid, '\t%d instances of classLabel=%d, containing: ', nPicked(s), s-1);
+      for ss=1:length(chosenClasses(s))
+          fprintf(fid, ' %s', chosenClasses{s}{ss});
+      end
+      fprintf(fid, '\n');
+  end
+  
+  fprintf(fid, '\nThe format in %s is as follows:\n', [outputFilename '.vis']);
+  fprintf(fid, 'PrimaryKey, realClassLabel(1 or 0), dimension1, dimension2, dimension3, feature1, ..., feature%d\n\n', maxLen);
+  fprintf(fid, 'The format in %s is as follows:\n', [outputFilename '.details']);
+  fprintf(fid, 'PrimaryKey, classLabel, ActualImageName, URLtoBePublishedAt\n');
+  fprintf(fid, '\n\nTo read this file you need to do:\n');
+  fprintf(fid, '  ok=load(''%s'', ''-mat''); A = ok.dataset;\n', [outputFilename '.vis']);
+
+  fclose(fid);
+  
+%dlmwrite([outputFilename '.vis'], dataset, 'delimiter', ',');
+save([outputFilename '.vis'], 'dataset', '-v7.3');
+fprintf(1, 'The raw images are stored.\n');
+fdet = fopen([outputFilename '.details'], 'w');
+fprintf(fdet, 'PrimaryKey, classLabel, ActualImageName, URLtoBePublishedAt\n');
+for i=1:length(imgName)
+   [pathstr, name, ext] = fileparts(imgName{i}); 
+   fprintf(fdet, '%d, %d, %s, %s\n', PK(i), binClasses(i), imgName{i}, [publishURL '/' name ext]);
+end
+fclose(fdet);
+fprintf(1, 'finished writing the details');
+
+elapsed = toc(overallTime);
+fprintf(1,'elapsed time=%f\n',elapsed);
+
+% -------------------------------------------------------------------------
+function whichOne = findSet(individualClasses, groups)
+% -------------------------------------------------------------------------
+if ~isvector(individualClasses)
+    error('bad args in findSet');
+end
+whichOne = zeros(size(individualClasses));
+for i=1:length(individualClasses)
+   c = [];
+   for g=1:length(groups)
+       if ismember(individualClasses(i), groups{g})
+           c(end+1) = g;
+       end
+   end
+   if length(c)~=1
+       error('bad groups or bad class id');
+   else
+       whichOne(i) = c(1);
+   end
+end
+
+
+% -------------------------------------------------------------------------
+function im = standarizeImage(im)
+% -------------------------------------------------------------------------
+
+im = im2single(im) ;
+if size(im,1) > 480, im = imresize(im, [480 NaN]) ; end
+
+

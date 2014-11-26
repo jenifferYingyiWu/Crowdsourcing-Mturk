@@ -1,0 +1,227 @@
+linear.cpp:509:11: warning: implicit conversion changes signedness: 'int' to 'size_t' (aka 'unsigned long') [-Wsign-conversion]
+        qsort(D, active_i, sizeof(double), compare_double);
+        ~~~~~    ^~~~~~~~
+linear.cpp:2111:26: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        int *label = Malloc(int,max_nr_class);
+                     ~~~~~~~~~~~^~~~~~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2112:26: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        int *count = Malloc(int,max_nr_class);
+                     ~~~~~~~~~~~^~~~~~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2113:31: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        int *data_label = Malloc(int,l);
+                          ~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2134:34: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                                label = (int *)realloc(label,max_nr_class*sizeof(int));
+                                                             ^~~~~~~~~~~~
+linear.cpp:2135:34: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                                count = (int *)realloc(count,max_nr_class*sizeof(int));
+                                                             ^~~~~~~~~~~~
+linear.cpp:2143:26: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        int *start = Malloc(int,nr_class);
+                     ~~~~~~~~~~~^~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2294:30: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                model_->w = Malloc(double, w_size);
+                            ~~~~~~~~~~~~~~~^~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2305:26: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                int *perm = Malloc(int,l);
+                            ~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2311:30: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                model_->label = Malloc(int,nr_class);
+                                ~~~~~~~~~~~^~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2316:39: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                double *weighted_C = Malloc(double, nr_class);
+                                     ~~~~~~~~~~~~~~~^~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2331:44: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                feature_node **x = Malloc(feature_node *,l);
+                                   ~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2339:47: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                sub_prob.x = Malloc(feature_node *,sub_prob.l);
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2340:39: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                sub_prob.y = Malloc(double,sub_prob.l);
+                             ~~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2348:29: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                        model_->w=Malloc(double, n*nr_class);
+                                  ~~~~~~~~~~~~~~~^~~~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2359:30: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                                model_->w=Malloc(double, w_size);
+                                          ~~~~~~~~~~~~~~~^~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2372:30: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                                model_->w=Malloc(double, w_size*nr_class);
+                                          ~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2373:30: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                                double *w=Malloc(double, w_size);
+                                          ~~~~~~~~~~~~~~~^~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2419:21: error: read-only variable is not assignable
+                model_->nr_feature=n-1;
+                ~~~~~~~~~~~~~~~~~~^
+linear.cpp:2421:21: error: read-only variable is not assignable
+                model_->nr_feature=n;
+                ~~~~~~~~~~~~~~~~~~^
+linear.cpp:2422:16: error: no viable overloaded '='
+        model_->param = *param;
+        ~~~~~~~~~~~~~ ^ ~~~~~~
+./linear.h:24:8: note: candidate function (the implicit copy assignment operator) not viable: 'this' argument has type 'const struct parameter', but method is not marked const
+struct parameter
+       ^
+linear.cpp:2423:15: error: read-only variable is not assignable
+        model_->bias = prob->bias;
+        ~~~~~~~~~~~~ ^
+linear.cpp:2429:13: error: read-only variable is not assignable
+                model_->w = Malloc(double, w_size);
+                ~~~~~~~~~ ^
+linear.cpp:2430:20: error: read-only variable is not assignable
+                model_->nr_class = 2;
+                ~~~~~~~~~~~~~~~~ ^
+linear.cpp:2431:17: error: read-only variable is not assignable
+                model_->label = NULL;
+                ~~~~~~~~~~~~~ ^
+linear.cpp:2440:26: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                int *perm = Malloc(int,l);
+                            ~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2445:19: error: read-only variable is not assignable
+                model_->nr_class=nr_class;
+                ~~~~~~~~~~~~~~~~^
+linear.cpp:2446:17: error: read-only variable is not assignable
+                model_->label = Malloc(int,nr_class);
+                ~~~~~~~~~~~~~ ^
+linear.cpp:2451:39: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                double *weighted_C = Malloc(double, nr_class);
+                                     ~~~~~~~~~~~~~~~^~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2466:44: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                feature_node **x = Malloc(feature_node *,l);
+                                   ~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2474:47: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                sub_prob.x = Malloc(feature_node *,sub_prob.l);
+                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2475:39: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                sub_prob.y = Malloc(double,sub_prob.l);
+                             ~~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2483:13: error: read-only variable is not assignable
+                        model_->w=Malloc(double, n*nr_class);
+                        ~~~~~~~~~^
+linear.cpp:2494:14: error: read-only variable is not assignable
+                                model_->w=Malloc(double, w_size);
+                                ~~~~~~~~~^
+linear.cpp:2507:14: error: read-only variable is not assignable
+                                model_->w=Malloc(double, w_size*nr_class);
+                                ~~~~~~~~~^
+linear.cpp:2508:30: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                                double *w=Malloc(double, w_size);
+                                          ~~~~~~~~~~~~~~~^~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2541:9: error: cannot initialize return object of type 'model *' with an lvalue of type 'const model *'
+        return model_;
+               ^~~~~~
+linear.cpp:2547:31: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        int *fold_start = Malloc(int,nr_fold+1);
+                          ~~~~~~~~~~~^~~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2549:25: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        int *perm = Malloc(int,l);
+                    ~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2570:51: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                subprob.x = Malloc(struct feature_node*,subprob.l);
+                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2571:37: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                subprob.y = Malloc(double,subprob.l);
+                            ~~~~~~~~~~~~~~~~~~~~~~^~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2648:46: warning: implicit conversion changes signedness: 'const int' to 'unsigned long' [-Wsign-conversion]
+        double *dec_values = Malloc(double, model_->nr_class);
+                             ~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2818:31: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+                        model_->label = Malloc(int,nr_class);
+                                        ~~~~~~~~~~~^~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:2845:27: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        model_->w=Malloc(double, w_size*nr_w);
+                  ~~~~~~~~~~~~~~~^~~~~~~~~~~~
+linear.cpp:22:40: note: expanded from macro 'Malloc'
+#define Malloc(type,n) (type *)malloc((n)*sizeof(type))
+                                      ~^
+linear.cpp:20:43: warning: implicit conversion changes signedness: 'int' to 'unsigned long' [-Wsign-conversion]
+        memcpy((void *)dst,(void *)src,sizeof(T)*n);
+                                       ~~~~~~    ^
+linear.cpp:506:2: note: in instantiation of function template specialization 'clone<double, double>' requested here
+        clone(D, B, active_i);
+        ^
+32 warnings and 13 errors generated.
+make: *** [linear.o] Error 1

@@ -1,0 +1,10 @@
+edit xClassify.m
+edit xIncClassify.m
+edit bClassify.m			
+edit pegasosClassify.m		
+edit tClassify.m			
+edit twClassify.m			
+edit incSClassify.m			
+edit nClassify.m	
+edit sClassifyFast.m			
+edit vrClassify.m
