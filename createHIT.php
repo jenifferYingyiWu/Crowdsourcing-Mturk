@@ -89,7 +89,12 @@ a:visited { color: blue; }
 		'numMistakes_reject' => $_POST["numMistakes_reject"], 		
 		'accuracy_block' => $_POST["accuracy_block"], 
 		'numMistakes_block' => $_POST["numMistakes_block"],
-		'usingGold' => $_POST["usingGold"]
+		'usingGold' => $_POST["usingGold"],
+		'detailFile' => $_POST["dataFile"],
+		'fractionToFail' => '0.01',
+		'csHistory' => 'csHistory',
+		'ifPayRejected' => 'true',
+		'ifBlockRejected' => 'true'
 	);
 	file_put_contents('users/' . $_POST["username"] . '/params/' 
 		. $_POST["resultsFile"] . '.params', json_encode($json, JSON_PRETTY_PRINT));

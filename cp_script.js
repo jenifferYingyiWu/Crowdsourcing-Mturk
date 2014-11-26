@@ -310,11 +310,12 @@ $(document).ready(function() {
 
 	// on submitting the form, set the value of the hidden input in the form
 	$("#hit_form").submit(function() {
-		$('input[name=keys_of_selected]').val(keys_of_selected.join(","));
-
-		if ($("input[name='usingGold']:checked").val() == 'true')
-			$('input[name=keys_of_gold]').val(keys_of_gold.join(","));
-		else 
-			$('input[name=keys_of_gold]').val("-1"); // dummy val for java command line arguments
+		selected_str = keys_of_selected.join(" ");
+		gold_str = keys_of_gold.join(" ");
+		// remove r's from ids.
+		selected_str = selected_str.replace(/r/g, "");
+		gold_str = gold_str.replace(/r/g, "");
+		$('input[name=keys_of_selected]').val(selected_str);
+		$('input[name=keys_of_gold]').val(gold_str);
 	});
 });
