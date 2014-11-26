@@ -62,7 +62,7 @@ a:visited { color: blue; }
 		. ' ' . $_POST["usingGold"]
 		. ' ' . $_POST["questionFile"]
 	);
-	echo "<pre>" . $output . "<pre>";
+	# echo "<pre>" . $output . "<pre>";
 	# updateDetails("sam", "face10.details", "PrimaryKey", "publishedURL", "orientation", "face10.question")
 
 	$json = array(

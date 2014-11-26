@@ -11,6 +11,10 @@
 <body>
 <?php
 session_start();
+if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+	header('Location: uploadFiles.html');	
+}
+
 // if there was an error opening the files
 if ($_FILES["dataFile"]["error"] > 0) {
 	echo "Error: " . $_FILES["dataFile"]["error"] . "<br>";
@@ -197,16 +201,15 @@ Number of records used as gold data: <span id="numGold">0</span>
 <option value="selectAsGold">Select as gold</option>
 <option value="deselect">Deselect</option>
 </select>
-records where column <input type="text" id="colToSearch" class="singleName form-control">
-has value <input type="text" id="valToSearch" class="singleName form-control">
+records where column <input type="text" id="colToSearch" class="singleName form-control" placeholder="column name">
+has value <input type="text" id="valToSearch" class="singleName form-control" placeholder="column value">
 <input id="executeTableOp" type="button" value="Execute"><br><br>
 
-Randomly select <input type="text" class="numeric" id="numRandSelected"> records
+Randomly select <input type="text" class="numeric form-control" id="numRandSelected"> records
 <span class="usingGold"> 
-where <input type="text" class="numeric" id="numSelectedAsGold">
+where <input type="text" class="form-control numeric" id="numSelectedAsGold">
 of the selected records are treated as gold records
-</span>
-<input id="executeRandSelect" type="button" value="Execute"><br><br>
+</span> <input id="executeRandSelect" type="button" value="Execute"><br><br>
 
 <p> Clicking a table row cycles through 
 <span id="tableRotations">unselected &#8594; selected &#8594; unselected.</span></p>
