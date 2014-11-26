@@ -480,8 +480,8 @@ public class MTurkCrowdSourcing {
             ResultSet rs = null;
 
             String url = "jdbc:mysql://localhost:3306/activeLearner";
-            String user = "cs_mturk";
-            String password = "umdb2014";
+            String user = "root";
+            String password = "";
 
             try {
                 con = DriverManager.getConnection(url, user, password);

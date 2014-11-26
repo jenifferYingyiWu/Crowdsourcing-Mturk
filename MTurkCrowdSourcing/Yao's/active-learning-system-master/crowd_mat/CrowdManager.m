@@ -189,6 +189,7 @@ classdef CrowdManager < handle
                 undefinedKey = tempKeys(realLabels == -1);
                 jsonFile = loadjson(obj.inputFilePath);
                 jsonFile.keys_of_selected = char(num2str(undefinedKey'));
+
                 savejson('', jsonFile, obj.inputFilePath);
                 conn = database('activeLearner','root','',...
                 'Vendor','MySQL',...

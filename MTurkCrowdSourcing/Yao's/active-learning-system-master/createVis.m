@@ -4,7 +4,7 @@ function createVis (filename, datafileName, username, inputFilePath)
 %     datafileName = 'new2.vis';
 %     username = 'lslsheng';
 
-    fileID = fopen(sprintf('/opt/lampp/htdocs/mturk/uploads/%s',filename));
+    fileID = fopen(sprintf('/Applications/MAMP/htdocs/Crowdsourcing-Mturk/uploads/%s',filename));
     C = textscan(fileID,'%s %s %s');
     fclose(fileID);
 
